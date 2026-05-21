@@ -9,7 +9,7 @@
         
         <div class="page-header-row">
           <h1 class="page-title">รายการ X-ray ที่นำเข้า</h1>
-          <button class="btn-primary-capsule">
+          <button class="btn-primary-capsule" (click)="uploadFile()">
             <ion-icon name="cloud-upload-outline"></ion-icon>
             อัปโหลดไฟล์ X-ray
           </button>
@@ -17,9 +17,9 @@
 
         <!-- Tabs -->
         <div class="tabs-pills">
-          <div class="tab-pill active">รายการ X-ray สมอง <span class="badge">85</span></div>
-          <div class="tab-pill">รายการ X-ray ทรวงอก <span class="badge">120</span></div>
-          <div class="tab-pill">รายการ X-ray ดวงตา <span class="badge">25</span></div>
+          <div class="tab-pill" [class.active]="activeTab === 'brain'" (click)="setActiveTab('brain')">รายการ X-ray สมอง <span class="badge">85</span></div>
+          <div class="tab-pill" [class.active]="activeTab === 'chest'" (click)="setActiveTab('chest')">รายการ X-ray ทรวงอก <span class="badge">120</span></div>
+          <div class="tab-pill" [class.active]="activeTab === 'eye'" (click)="setActiveTab('eye')">รายการ X-ray ดวงตา <span class="badge">25</span></div>
         </div>
 
         <!-- Filters & Summary Cards -->
@@ -77,14 +77,14 @@
               </select>
             </div>
 
-            <button class="btn-text">
+            <button class="btn-text" (click)="advancedFilter()">
               <ion-icon name="filter-outline"></ion-icon>
               ตัวกรองขั้นสูง
             </button>
             
             <div class="spacer"></div>
 
-            <button class="btn-outline-capsule">
+            <button class="btn-outline-capsule" (click)="exportData()">
               <ion-icon name="push-outline"></ion-icon> Export
             </button>
           </div>
@@ -125,7 +125,7 @@
                   </td>
                   <td>04/05/2567 10:00</td>
                   <td>
-                    <button class="btn-link">
+                    <button class="btn-link" (click)="viewDetails(item.orderNo)">
                       <ion-icon name="eye"></ion-icon>
                       รายละเอียด
                     </button>
@@ -145,8 +145,8 @@
             </div>
             <div class="page-controls">
               <span class="text-muted">Prev</span>
-              <button class="page-btn active">1</button>
-              <button class="page-btn">2</button>
+              <button class="page-btn active" (click)="changePage(1)">1</button>
+              <button class="page-btn" (click)="changePage(2)">2</button>
               <span class="text-dark">Next</span>
             </div>
           </div>

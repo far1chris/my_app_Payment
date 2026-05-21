@@ -20,4 +20,17 @@ export class SidebarComponent  implements OnInit {
 
   ngOnInit() {}
 
+  isXrayMenuExpanded = true;
+
+  toggleXrayMenu() {
+    this.isXrayMenuExpanded = !this.isXrayMenuExpanded;
+  }
+
+  toggleSidebar() {
+    alert('ระบบจำลอง: ซ่อน/แสดง แถบเมนูด้านซ้าย');
+  }
+
+  alertMockup() {
+    alert('ระบบจำลอง: กำลังเปิดหน้ารายการรอ X-ray...');
+  }
 }

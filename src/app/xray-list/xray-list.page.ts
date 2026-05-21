@@ -37,4 +37,29 @@ export class XrayListPage implements OnInit {
     });
   }
 
+  public activeTab: string = 'brain';
+
+  setActiveTab(tab: string) {
+    this.activeTab = tab;
+  }
+
+  uploadFile() {
+    alert('ระบบจำลอง: กำลังเปิดหน้าต่างอัปโหลดไฟล์ X-ray...');
+  }
+
+  advancedFilter() {
+    alert('ระบบจำลอง: กำลังเปิดหน้าต่างตัวกรองขั้นสูง...');
+  }
+
+  exportData() {
+    alert('ระบบจำลอง: กำลังเตรียมไฟล์เพื่อส่งออก (Export)...');
+  }
+
+  viewDetails(orderNo: string) {
+    alert('ระบบจำลอง: กำลังเปิดหน้ารายละเอียดของรายการ ' + orderNo);
+  }
+
+  changePage(page: number) {
+    alert('ระบบจำลอง: กำลังเปลี่ยนไปยังหน้าที่ ' + page);
+  }
 }

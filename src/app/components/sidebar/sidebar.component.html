@@ -1,6 +1,6 @@
 <aside class="sidebar">
   <div class="sidebar-header">
-    <button class="hamburger-btn">
+    <button class="hamburger-btn" (click)="toggleSidebar()">
       <ion-icon name="menu-outline"></ion-icon>
     </button>
     <div class="brand-logo">
@@ -16,8 +16,8 @@
       </a>
     </div>
 
-    <div class="menu-item-wrapper expanded">
-      <a class="menu-item has-submenu">
+    <div class="menu-item-wrapper" [class.expanded]="isXrayMenuExpanded">
+      <a class="menu-item has-submenu" (click)="toggleXrayMenu()">
         <ion-icon name="document-text-outline"></ion-icon>
         <span>รายการ X-ray</span>
         <ion-icon name="chevron-up-outline" class="toggle-icon"></ion-icon>
@@ -26,7 +26,7 @@
         <a routerLink="/xray-list" routerLinkActive="active" class="submenu-item">
           รายการ X-ray ที่นำเข้า
         </a>
-        <a href="#" class="submenu-item">
+        <a class="submenu-item" (click)="alertMockup()" style="cursor: pointer;">
           รายการรอ X-ray
         </a>
       </div>

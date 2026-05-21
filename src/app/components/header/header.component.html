@@ -4,7 +4,7 @@
   </div>
 
   <div class="header-right">
-    <div class="location-selector">
+    <div class="location-selector" (click)="openLocation()" style="cursor: pointer;">
       <div class="hospital-icon">
         <ion-icon name="medkit-outline"></ion-icon>
       </div>
@@ -12,12 +12,12 @@
       <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
     </div>
     
-    <div class="notification-icon">
+    <div class="notification-icon" (click)="openNotifications()" style="cursor: pointer;">
       <ion-icon name="notifications-outline"></ion-icon>
       <span class="badge">1</span>
     </div>
 
-    <div class="user-profile">
+    <div class="user-profile" (click)="openProfile()" style="cursor: pointer;">
       <div class="avatar">
         <!-- Placeholder for user avatar -->
         <img src="https://ui-avatars.com/api/?name=TN&background=e2e8f0&color=334155" alt="User" />

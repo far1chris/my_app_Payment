@@ -19,4 +19,15 @@ export class HeaderComponent  implements OnInit {
 
   ngOnInit() {}
 
+  openLocation() {
+    alert('ระบบจำลอง: เลือกหน่วยบริการ');
+  }
+
+  openNotifications() {
+    alert('ระบบจำลอง: เปิดรายการแจ้งเตือน (Notifications)');
+  }
+
+  openProfile() {
+    alert('ระบบจำลอง: เปิดเมนูโปรไฟล์ผู้ใช้งาน');
+  }
 }
