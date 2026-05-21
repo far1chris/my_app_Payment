@@ -4,7 +4,8 @@
   </div>
 
   <div class="header-right">
-    <div class="location-selector" (click)="openLocation()" style="cursor: pointer;">
+    <!-- Location Selector -->
+    <div class="location-selector" [id]="'location-trigger-' + componentId" style="cursor: pointer;">
       <div class="hospital-icon">
         <ion-icon name="medkit-outline"></ion-icon>
       </div>
@@ -12,12 +13,57 @@
       <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
     </div>
     
-    <div class="notification-icon" (click)="openNotifications()" style="cursor: pointer;">
+    <ion-popover [trigger]="'location-trigger-' + componentId" triggerAction="click" alignment="center" class="premium-popover" [dismissOnSelect]="true">
+      <ng-template>
+        <ion-content class="custom-popover-content">
+          <div class="popover-header">
+            <span class="ph-title">เลือกหน่วยบริการ</span>
+          </div>
+          <div class="popover-body">
+            <div class="p-item active">
+              <div class="p-icon"><ion-icon name="medkit-outline"></ion-icon></div>
+              <div class="p-text">หน่วยบริการ A</div>
+              <ion-icon name="checkmark-circle" class="check-icon"></ion-icon>
+            </div>
+            <div class="p-item">
+              <div class="p-icon"><ion-icon name="medkit-outline"></ion-icon></div>
+              <div class="p-text">หน่วยบริการ B (ศูนย์ตา)</div>
+            </div>
+          </div>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+
+    <!-- Notifications -->
+    <div class="notification-icon" [id]="'notification-trigger-' + componentId" style="cursor: pointer;">
       <ion-icon name="notifications-outline"></ion-icon>
       <span class="badge">1</span>
     </div>
 
-    <div class="user-profile" (click)="openProfile()" style="cursor: pointer;">
+    <ion-popover [trigger]="'notification-trigger-' + componentId" triggerAction="click" alignment="center" class="premium-popover">
+      <ng-template>
+        <ion-content class="custom-popover-content">
+          <div class="popover-header">
+            <span class="ph-title">การแจ้งเตือน</span>
+            <span class="ph-action">อ่านทั้งหมด</span>
+          </div>
+          <div class="popover-body">
+            <div class="p-item unread">
+              <div class="p-icon notif"><ion-icon name="alert-circle-outline"></ion-icon></div>
+              <div class="p-text">
+                <strong>มีรายการ X-ray เข้าใหม่</strong>
+                <span>เคสคุณสมหมาย ใจดี (ด่วน)</span>
+                <span class="time">เพิ่งสัักครู่</span>
+              </div>
+              <div class="unread-dot"></div>
+            </div>
+          </div>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+
+    <!-- User Profile -->
+    <div class="user-profile" [id]="'profile-trigger-' + componentId" style="cursor: pointer;">
       <div class="avatar">
         <!-- Placeholder for user avatar -->
         <img src="https://ui-avatars.com/api/?name=TN&background=e2e8f0&color=334155" alt="User" />
@@ -28,5 +74,37 @@
       </div>
       <ion-icon name="chevron-down-outline" class="dropdown-icon"></ion-icon>
     </div>
+
+    <ion-popover [trigger]="'profile-trigger-' + componentId" triggerAction="click" alignment="end" class="premium-popover" [dismissOnSelect]="true">
+      <ng-template>
+        <ion-content class="custom-popover-content">
+          <div class="profile-header">
+            <div class="avatar-lg">
+              <img src="https://ui-avatars.com/api/?name=TN&background=e2e8f0&color=334155" alt="User" />
+            </div>
+            <div class="p-info">
+              <strong>นายพัชรพงศ์ จิตภักดี</strong>
+              <span>เจ้าหน้าที่รังสี</span>
+            </div>
+          </div>
+          <div class="popover-body">
+            <div class="p-item">
+              <div class="p-icon"><ion-icon name="person-outline"></ion-icon></div>
+              <div class="p-text">โปรไฟล์ของฉัน</div>
+            </div>
+            <div class="p-item">
+              <div class="p-icon"><ion-icon name="settings-outline"></ion-icon></div>
+              <div class="p-text">ตั้งค่าบัญชี</div>
+            </div>
+            <div class="divider"></div>
+            <div class="p-item danger">
+              <div class="p-icon"><ion-icon name="log-out-outline"></ion-icon></div>
+              <div class="p-text">ออกจากระบบ</div>
+            </div>
+          </div>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+
   </div>
 </header>

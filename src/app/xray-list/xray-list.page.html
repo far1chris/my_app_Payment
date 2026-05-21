@@ -1,5 +1,5 @@
 <ion-content [fullscreen]="true">
-  <div class="layout-wrapper">
+  <div class="layout-wrapper" [class.sidebar-collapsed]="layout.isSidebarCollapsed()">
     <app-sidebar></app-sidebar>
     
     <div class="main-content">
@@ -17,9 +17,10 @@
 
         <!-- Tabs -->
         <div class="tabs-pills">
-          <div class="tab-pill" [class.active]="activeTab === 'brain'" (click)="setActiveTab('brain')">รายการ X-ray สมอง <span class="badge">85</span></div>
-          <div class="tab-pill" [class.active]="activeTab === 'chest'" (click)="setActiveTab('chest')">รายการ X-ray ทรวงอก <span class="badge">120</span></div>
-          <div class="tab-pill" [class.active]="activeTab === 'eye'" (click)="setActiveTab('eye')">รายการ X-ray ดวงตา <span class="badge">25</span></div>
+          <div class="tab-pill" [class.active]="activeTab === 'all'" (click)="setActiveTab('all')">ทั้งหมด <span class="badge">{{allXrayData.length}}</span></div>
+          <div class="tab-pill" [class.active]="activeTab === 'brain'" (click)="setActiveTab('brain')">สมอง (CT/MRI) <span class="badge">{{getTabCount('brain')}}</span></div>
+          <div class="tab-pill" [class.active]="activeTab === 'chest'" (click)="setActiveTab('chest')">ทรวงอก (XR) <span class="badge">{{getTabCount('chest')}}</span></div>
+          <div class="tab-pill" [class.active]="activeTab === 'eye'" (click)="setActiveTab('eye')">ดวงตา <span class="badge">{{getTabCount('eye')}}</span></div>
         </div>
 
         <!-- Filters & Summary Cards -->
@@ -67,13 +68,15 @@
           <div class="table-header-controls">
             <div class="search-box">
               <ion-icon name="search-outline"></ion-icon>
-              <input type="text" placeholder="ค้นหา" />
+              <input type="text" placeholder="ค้นหา" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" />
             </div>
             
             <div class="filter-dropdown">
               <span class="filter-label">ความเร่งด่วนของเคส : </span>
-              <select>
-                <option>ทั้งหมด</option>
+              <select [(ngModel)]="selectedPriority" (ngModelChange)="applyFilters()">
+                <option value="All">ทั้งหมด</option>
+                <option value="Urgent">เคสด่วน (Urgent)</option>
+                <option value="Normal">เคสปกติ (Normal)</option>
               </select>
             </div>
 
@@ -84,9 +87,36 @@
             
             <div class="spacer"></div>
 
-            <button class="btn-outline-capsule" (click)="exportData()">
-              <ion-icon name="push-outline"></ion-icon> Export
-            </button>
+            <div class="export-dropdown-container">
+              <button class="btn-outline-capsule" (click)="toggleExportDropdown()">
+                <ion-icon name="push-outline"></ion-icon> Export
+              </button>
+              
+              <!-- Dropdown Menu -->
+              <div class="custom-dropdown-menu" *ngIf="isExportDropdownOpen">
+                <div class="dropdown-header">
+                  <span>เลือกรูปแบบไฟล์ดาวน์โหลด</span>
+                </div>
+                <div class="dropdown-item" (click)="exportToXlsx()">
+                  <div class="d-icon" style="background-color: #e2f2e9;">
+                    <img src="https://api.iconify.design/vscode-icons:file-type-excel.svg" width="24" height="24" />
+                  </div>
+                  <div class="d-text">
+                    <strong>Excel / Google Sheets (.xlsx)</strong>
+                    <span>ไฟล์ตารางพร้อมตกแต่งสีสันสวยงาม</span>
+                  </div>
+                </div>
+                <div class="dropdown-item" (click)="exportToCsv()">
+                  <div class="d-icon" style="background-color: #f1f5f9;">
+                    <img src="https://api.iconify.design/vscode-icons:file-type-text.svg" width="24" height="24" />
+                  </div>
+                  <div class="d-text">
+                    <strong>ข้อมูลตารางดิบ (.csv)</strong>
+                    <span>ไม่มีสีตกแต่ง เหมาะกับการนำไปรันระบบต่อ</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="table-responsive">
@@ -104,7 +134,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of xrayDataList">
+                <tr *ngFor="let item of paginatedData">
                   <td>{{ item.orderNo }}</td>
                   <td>{{ item.patientName | uppercase }}</td>
                   <td>{{ item.hn }}</td>
@@ -125,7 +155,7 @@
                   </td>
                   <td>04/05/2567 10:00</td>
                   <td>
-                    <button class="btn-link" (click)="viewDetails(item.orderNo)">
+                    <button class="btn-link" (click)="viewDetails(item)">
                       <ion-icon name="eye"></ion-icon>
                       รายละเอียด
                     </button>
@@ -139,19 +169,189 @@
           <div class="pagination">
             <div class="page-info">
               แสดงทั้งหมด 
-              <select class="page-select">
-                <option>10 / page</option>
+              <select class="page-select" [(ngModel)]="itemsPerPage" (ngModelChange)="applyFilters()">
+                <option [ngValue]="2">2 / page</option>
+                <option [ngValue]="10">10 / page</option>
               </select>
             </div>
             <div class="page-controls">
-              <span class="text-muted">Prev</span>
-              <button class="page-btn active" (click)="changePage(1)">1</button>
-              <button class="page-btn" (click)="changePage(2)">2</button>
-              <span class="text-dark">Next</span>
+              <span class="text-muted" (click)="changePage(currentPage - 1)">Prev</span>
+              <button class="page-btn" *ngFor="let p of totalPagesArray" [class.active]="currentPage === p" (click)="changePage(p)">{{ p }}</button>
+              <span class="text-dark" (click)="changePage(currentPage + 1)">Next</span>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Detail Modal -->
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()" class="custom-detail-modal">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title>
+            <div class="modal-title">
+              <ion-icon name="document-text-outline" class="title-icon"></ion-icon>
+              <span>รายละเอียดรายการ</span>
+              <span class="order-no">{{ selectedXray?.orderNo }}</span>
+            </div>
+          </ion-title>
+          <ion-buttons slot="end">
+            <button class="btn-close-modal" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="custom-modal-content">
+        <div class="detail-card">
+          <div class="patient-header">
+            <div class="avatar-circle">
+              <ion-icon name="person"></ion-icon>
+            </div>
+            <div class="patient-info">
+              <h2>{{ selectedXray?.patientName }}</h2>
+              <p>H/N: <strong>{{ selectedXray?.hn }}</strong></p>
+            </div>
+            <div class="status-badge" [ngClass]="{'badge-green': selectedXray?.status === 'Completed', 'badge-yellow': selectedXray?.status === 'In Progress'}">
+              {{ selectedXray?.status }}
+            </div>
+          </div>
+          
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="d-label"><ion-icon name="scan-outline"></ion-icon> ประเภท X-ray</span>
+              <span class="d-value">{{ selectedXray?.modality }} ({{ selectedXray?.examName }})</span>
+            </div>
+            <div class="detail-item">
+              <span class="d-label"><ion-icon name="alert-circle-outline"></ion-icon> ความเร่งด่วน</span>
+              <span class="d-value" [ngClass]="{'text-red': selectedXray?.priority === 'Urgent'}">{{ selectedXray?.priority }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="d-label"><ion-icon name="calendar-outline"></ion-icon> วันที่ X-ray</span>
+              <span class="d-value">{{ selectedXray?.orderDate }}</span>
+            </div>
+          </div>
+          
+
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+  <!-- Upload Modal -->
+  <ion-modal [isOpen]="isUploadModalOpen" (didDismiss)="closeUploadModal()" class="custom-upload-modal">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title>
+            <div class="modal-title">
+              <ion-icon name="cloud-upload-outline" class="title-icon"></ion-icon>
+              <span>อัปโหลดไฟล์ X-ray</span>
+            </div>
+          </ion-title>
+          <ion-buttons slot="end">
+            <button class="btn-close-modal" (click)="closeUploadModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="custom-modal-content ion-padding">
+        <div class="upload-dropzone" (click)="fileInput.click()">
+          <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>
+          <h3>ลากไฟล์มาวางที่นี่</h3>
+          <p>หรือคลิกเพื่อเลือกไฟล์ (DICOM, JPG, PNG)</p>
+          <input type="file" #fileInput hidden (change)="onFileSelected($event)" accept=".dcm,.jpg,.jpeg,.png,.pdf">
+          <button class="btn-primary-capsule upload-btn">
+            เลือกไฟล์
+          </button>
+        </div>
+
+        <div class="upload-guidelines">
+          <div class="guideline-card dicom-card">
+            <ion-icon name="medkit"></ion-icon>
+            <div class="g-text">
+              <strong>ไฟล์ DICOM (.dcm) (แนะนำ)</strong>
+              <span>มาตรฐานทางการแพทย์ เก็บรายละเอียดภาพและข้อมูลผู้ป่วยครบถ้วน เหมาะส่งให้แพทย์หรืออัปโหลดเข้าระบบโรงพยาบาล</span>
+            </div>
+          </div>
+          
+          <div class="guideline-card alt-card">
+            <ion-icon name="images-outline"></ion-icon>
+            <div class="g-text">
+              <strong>ไฟล์รูปภาพ (.jpg, .jpeg, .png)</strong>
+              <span>เหมาะสำหรับส่งดูเบื้องต้น (อาจสูญเสียความคมชัด)</span>
+            </div>
+          </div>
+
+          <div class="guideline-card alt-card">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <div class="g-text">
+              <strong>ไฟล์เอกสาร (.pdf)</strong>
+              <span>เหมาะสำหรับกรณีที่มีใบรายงานผลแพทย์รวมอยู่ด้วย</span>
+            </div>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Advanced Filter Modal -->
+  <ion-modal [isOpen]="isFilterModalOpen" (didDismiss)="closeFilterModal()" class="custom-filter-modal">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title>
+            <div class="modal-title">
+              <ion-icon name="filter-outline" class="title-icon"></ion-icon>
+              <span>ตัวกรองขั้นสูง</span>
+            </div>
+          </ion-title>
+          <ion-buttons slot="end">
+            <button class="btn-close-modal" (click)="closeFilterModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="custom-modal-content ion-padding">
+        <div class="filter-form">
+          <div class="form-group">
+            <label>ช่วงวันที่</label>
+            <div class="date-range">
+              <input type="date" class="form-input" />
+              <span>ถึง</span>
+              <input type="date" class="form-input" />
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>สถานะรายการ</label>
+            <select class="form-select">
+              <option>ทั้งหมด</option>
+              <option>รอรับผล</option>
+              <option>ยืนยันผลแล้ว</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>ประเภท X-ray</label>
+            <select class="form-select">
+              <option>ทั้งหมด</option>
+              <option>CT Brain</option>
+              <option>Chest X-ray</option>
+              <option>MRI</option>
+            </select>
+          </div>
+
+          <div class="form-actions" style="margin-top: 32px; display: flex; gap: 12px; justify-content: flex-end;">
+            <button class="btn-outline-capsule" (click)="closeFilterModal()">ล้างค่า</button>
+            <button class="btn-primary-capsule" (click)="closeFilterModal()">นำไปใช้</button>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>
