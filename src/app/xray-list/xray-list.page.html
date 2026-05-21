@@ -1,0 +1,157 @@
+<ion-content [fullscreen]="true">
+  <div class="layout-wrapper">
+    <app-sidebar></app-sidebar>
+    
+    <div class="main-content">
+      <app-header></app-header>
+
+      <div class="page-container">
+        
+        <div class="page-header-row">
+          <h1 class="page-title">รายการ X-ray ที่นำเข้า</h1>
+          <button class="btn-primary-capsule">
+            <ion-icon name="cloud-upload-outline"></ion-icon>
+            อัปโหลดไฟล์ X-ray
+          </button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-pills">
+          <div class="tab-pill active">รายการ X-ray สมอง <span class="badge">85</span></div>
+          <div class="tab-pill">รายการ X-ray ทรวงอก <span class="badge">120</span></div>
+          <div class="tab-pill">รายการ X-ray ดวงตา <span class="badge">25</span></div>
+        </div>
+
+        <!-- Filters & Summary Cards -->
+        <div class="summary-cards">
+          <div class="card stat-card active-stat">
+            <div class="icon-circle bg-blue-light">
+              <!-- Placeholder for head icon -->
+              <img src="https://api.iconify.design/fluent-emoji-flat:brain.svg" width="24" height="24" />
+            </div>
+            <div class="stat-info">
+              <span class="label">รายการทั้งหมด</span>
+              <div class="value-container">
+                <span class="value text-blue">85</span> <span class="unit">เคส</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card stat-card">
+            <div class="icon-circle bg-yellow-light">
+              <img src="https://api.iconify.design/flat-color-icons:document.svg" width="24" height="24" />
+            </div>
+            <div class="stat-info">
+              <span class="label">รอรับผล</span>
+              <div class="value-container">
+                <span class="value text-yellow">40</span> <span class="unit">เคส</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="icon-circle bg-green-light">
+              <img src="https://api.iconify.design/flat-color-icons:approval.svg" width="24" height="24" />
+            </div>
+            <div class="stat-info">
+              <span class="label">ยืนยันผลวินิจฉัย</span>
+              <div class="value-container">
+                <span class="value text-green">45</span> <span class="unit">เคส</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Workspace -->
+        <div class="table-card">
+          <div class="table-header-controls">
+            <div class="search-box">
+              <ion-icon name="search-outline"></ion-icon>
+              <input type="text" placeholder="ค้นหา" />
+            </div>
+            
+            <div class="filter-dropdown">
+              <span class="filter-label">ความเร่งด่วนของเคส : </span>
+              <select>
+                <option>ทั้งหมด</option>
+              </select>
+            </div>
+
+            <button class="btn-text">
+              <ion-icon name="filter-outline"></ion-icon>
+              ตัวกรองขั้นสูง
+            </button>
+            
+            <div class="spacer"></div>
+
+            <button class="btn-outline-capsule">
+              <ion-icon name="push-outline"></ion-icon> Export
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>เลขที่รายการ <ion-icon name="information-circle-outline"></ion-icon></th>
+                  <th>ชื่อผู้ป่วย</th>
+                  <th>H/N</th>
+                  <th>ประเภท X-ray</th>
+                  <th>สถานะรายการ</th>
+                  <th>ผลลัพธ์</th>
+                  <th>วันที่ X-ray</th>
+                  <th>จัดการ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of xrayDataList">
+                  <td>{{ item.orderNo }}</td>
+                  <td>{{ item.patientName | uppercase }}</td>
+                  <td>{{ item.hn }}</td>
+                  <td>{{ item.modality }} , 2D</td>
+                  <td>
+                    <div class="status-cell">
+                      <span class="dot" [ngClass]="{'dot-yellow': item.status === 'In Progress' || item.status === 'รอรับผล', 'dot-green': item.status === 'Completed' || item.status === 'ยืนยันผลแล้ว'}"></span>
+                      <span [ngClass]="{'text-yellow': item.status === 'In Progress' || item.status === 'รอรับผล', 'text-green': item.status === 'Completed' || item.status === 'ยืนยันผลแล้ว'}">
+                        {{ item.status === 'In Progress' ? 'รอรับผล' : 'ยืนยันผลแล้ว' }}
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="status-cell">
+                      <span class="dot dot-green"></span>
+                      <span class="text-green">ไม่พบโรค</span>
+                    </div>
+                  </td>
+                  <td>04/05/2567 10:00</td>
+                  <td>
+                    <button class="btn-link">
+                      <ion-icon name="eye"></ion-icon>
+                      รายละเอียด
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="pagination">
+            <div class="page-info">
+              แสดงทั้งหมด 
+              <select class="page-select">
+                <option>10 / page</option>
+              </select>
+            </div>
+            <div class="page-controls">
+              <span class="text-muted">Prev</span>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <span class="text-dark">Next</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

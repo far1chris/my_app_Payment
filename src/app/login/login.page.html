@@ -1,0 +1,57 @@
+<ion-content [fullscreen]="true" class="login-content">
+  <!-- Wavy Background Decorators -->
+  <div class="bg-shape shape-tl"></div>
+  <div class="bg-shape shape-br"></div>
+
+  <div class="login-container">
+    <div class="login-card">
+      <!-- Left Side: AI Branding -->
+      <div class="login-left">
+        <div class="top-logo">
+          <div class="logo-circle">
+            <ion-icon name="git-network-outline"></ion-icon>
+          </div>
+          <span>Manage AI</span>
+        </div>
+        
+        <div class="illustration">
+          <img src="assets/ai_robot_xray.png" alt="AI Robot" />
+        </div>
+
+        <div class="left-footer">
+          <h2>AI - CXR SCREENING</h2>
+        </div>
+      </div>
+
+      <!-- Right Side: Login Options -->
+      <div class="login-right">
+        <div class="brand-logo">
+          <span class="blue-light">1</span><span class="blue-dark">LIFE</span> <span class="sys-text">System</span>
+        </div>
+        
+        <p class="subtitle">
+          เข้าสู่ระบบด้วยบัญชี <span class="provider-id-logo">PROVIDER <strong>ID</strong></span> ของคุณ
+        </p>
+        
+        <div class="action-buttons">
+          <button type="button" class="btn-primary" (click)="login()">
+            ลงชื่อเข้าใช้งาน
+          </button>
+          
+          <button type="button" class="btn-outline">
+            ลงทะเบียน
+          </button>
+        </div>
+
+        <div class="divider">
+          <span>หรือ</span>
+        </div>
+
+        <button type="button" class="btn-one-id">
+          <span class="one-platform-logo"><strong>ONE</strong> <small>PLATFORM</small></span>
+          เข้าสู่ระบบด้วย ONE ID
+        </button>
+      </div>
+    </div>
+  </div>
+</ion-content>

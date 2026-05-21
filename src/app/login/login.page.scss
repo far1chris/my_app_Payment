@@ -1,0 +1,272 @@
+.login-content {
+  --background: #f0f4f9; /* Light blueish background */
+}
+
+/* Wavy background simulators */
+.bg-shape {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.5;
+  z-index: 0;
+  pointer-events: none;
+}
+.shape-tl {
+  width: 60vw;
+  height: 60vw;
+  top: -30vw;
+  left: -20vw;
+}
+.shape-br {
+  width: 70vw;
+  height: 70vw;
+  bottom: -40vw;
+  right: -20vw;
+}
+
+.login-container {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-card {
+  display: flex;
+  width: 100%;
+  max-width: 900px;
+  height: 550px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Left Side: Dark Blue AI Branding */
+.login-left {
+  flex: 1;
+  background-color: #223275; /* Specific dark blue from design */
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 24px;
+}
+
+.top-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  background: white;
+  color: #223275;
+  padding: 8px 12px;
+  border-radius: 8px 8px 24px 8px; /* Custom shape from design */
+  
+  .logo-circle {
+    font-size: 1.5rem;
+    color: #0ea5e9;
+  }
+  
+  span {
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-top: -2px;
+  }
+}
+
+.illustration {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  img {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+  }
+}
+
+.left-footer {
+  text-align: center;
+  padding-bottom: 16px;
+  
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 1px;
+  }
+}
+
+/* Right Side: Login Options */
+.login-right {
+  flex: 1;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 60px;
+}
+
+.brand-logo {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  
+  .blue-light {
+    color: #38bdf8;
+    font-size: 2.8rem;
+    line-height: 1;
+  }
+  .blue-dark {
+    color: #1e3a8a;
+  }
+  .sys-text {
+    color: #1e40af;
+    font-weight: 400;
+  }
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.provider-id-logo {
+  color: #16a34a;
+  font-weight: 600;
+  border-bottom: 2px solid #facc15; /* Yellow line under ID */
+  padding-bottom: 2px;
+  line-height: 1;
+  
+  strong {
+    background: #16a34a;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin-left: 2px;
+  }
+}
+
+.action-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.btn-primary {
+  width: 100%;
+  background-color: #223275;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #1e293b;
+  }
+}
+
+.btn-outline {
+  width: 100%;
+  background: white;
+  color: #223275;
+  border: 1px solid #94a3b8;
+  border-radius: 24px;
+  padding: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #f1f5f9;
+  }
+}
+
+.divider {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 24px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  span {
+    padding: 0 16px;
+  }
+}
+
+.btn-one-id {
+  width: 100%;
+  background: white;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  .one-platform-logo {
+    color: #0369a1;
+    font-size: 0.9rem;
+    
+    strong {
+      color: #0284c7;
+    }
+    small {
+      font-size: 0.6rem;
+      letter-spacing: 1px;
+    }
+  }
+
+  &:hover {
+    background: #f8fafc;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    flex-direction: column;
+    height: auto;
+  }
+  .login-left {
+    padding: 30px 20px;
+  }
+  .login-right {
+    padding: 30px 20px;
+  }
+}

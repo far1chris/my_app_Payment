@@ -1,0 +1,128 @@
+.app-header {
+  height: 72px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.location-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid var(--border-light);
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+
+  .hospital-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: #fee2e2;
+    border-radius: 50%;
+    color: #ef4444;
+    font-size: 0.9rem;
+  }
+
+  span { color: var(--text-muted); }
+  .chevron { color: var(--text-muted); font-size: 1rem; }
+
+  &:hover {
+    background: #f8fafc;
+  }
+}
+
+.notification-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  
+  ion-icon {
+    font-size: 1.4rem;
+    color: var(--primary-navy);
+  }
+
+  .badge {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    background: #ef4444;
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 700;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid var(--background-offwhite);
+  }
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 4px;
+  transition: all 0.2s;
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+
+    .user-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary-navy);
+    }
+    .user-role {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+  }
+
+  .dropdown-icon {
+    color: var(--primary-blue);
+    font-size: 1rem;
+    margin-left: 4px;
+  }
+}

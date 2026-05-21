@@ -1,0 +1,35 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <button class="hamburger-btn">
+      <ion-icon name="menu-outline"></ion-icon>
+    </button>
+    <div class="brand-logo">
+      <span class="blue-light">1</span><span class="blue-dark">LIFE</span> <span class="sys-text">System</span>
+    </div>
+  </div>
+
+  <div class="sidebar-menu">
+    <div class="menu-item-wrapper">
+      <a routerLink="/dashboard" routerLinkActive="active" class="menu-item">
+        <ion-icon name="grid-outline"></ion-icon>
+        <span>Dashboard</span>
+      </a>
+    </div>
+
+    <div class="menu-item-wrapper expanded">
+      <a class="menu-item has-submenu">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <span>รายการ X-ray</span>
+        <ion-icon name="chevron-up-outline" class="toggle-icon"></ion-icon>
+      </a>
+      <div class="submenu">
+        <a routerLink="/xray-list" routerLinkActive="active" class="submenu-item">
+          รายการ X-ray ที่นำเข้า
+        </a>
+        <a href="#" class="submenu-item">
+          รายการรอ X-ray
+        </a>
+      </div>
+    </div>
+  </div>
+</aside>

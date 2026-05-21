@@ -1,0 +1,72 @@
+{
+  "xrays": [
+    {
+      "id": 1,
+      "orderNo": "ORD-001",
+      "orderDate": "12/10/2025 10:30",
+      "hn": "HN-99001",
+      "patientName": "นาย ทดสอบ ระบบ1",
+      "modality": "XR",
+      "examName": "Chest PA Upright",
+      "priority": "Normal",
+      "status": "Completed"
+    },
+    {
+      "id": 2,
+      "orderNo": "ORD-002",
+      "orderDate": "12/10/2025 11:15",
+      "hn": "HN-99002",
+      "patientName": "นาง ใจดี มีสุข",
+      "modality": "CT",
+      "examName": "CT Brain",
+      "priority": "Urgent",
+      "status": "In Progress"
+    },
+    {
+      "id": 3,
+      "orderNo": "ORD-003",
+      "orderDate": "12/10/2025 13:45",
+      "hn": "HN-99003",
+      "patientName": "นาย สมชาย เข็มกลัด",
+      "modality": "XR",
+      "examName": "KUB",
+      "priority": "Normal",
+      "status": "Completed"
+    },
+    {
+      "id": 4,
+      "orderNo": "ORD-004",
+      "orderDate": "12/10/2025 14:20",
+      "hn": "HN-99004",
+      "patientName": "เด็กชาย เรียนดี",
+      "modality": "MRI",
+      "examName": "MRI Spine",
+      "priority": "Normal",
+      "status": "In Progress"
+    }
+  ],
+  "dashboard": {
+    "totalOrders": 113,
+    "completed": 100,
+    "inProgress": 12,
+    "cancelled": 1,
+    "schedules": [
+      { "id": 1, "day": "Tue", "date": 15, "patient": "นาย ทดสอบ ระบบ", "hn": "HN-00100", "time": "11.00 - 12.00 น." },
+      { "id": 2, "day": "Wed", "date": 16, "patient": "นาง ใจดี มีสุข", "hn": "HN-00101", "time": "09.00 - 10.00 น." },
+      { "id": 3, "day": "Thu", "date": 17, "patient": "นาย สมหมาย จริงใจ", "hn": "HN-00102", "time": "13.00 - 14.00 น." }
+    ],
+    "consultStats": {
+      "waitList": 96,
+      "consulting": 4,
+      "complete": 84
+    },
+    "barChart": {
+      "labels": ["13 Mon", "14 Tue", "15 Wed", "16 Thu", "17 Fri", "18 Sat", "19 Sun"],
+      "data": [65, 59, 80, 81, 56, 55, 40]
+    },
+    "donutChart": {
+      "labels": ["Male", "Female"],
+      "data": [350, 450]
+    }
+  }
+}
