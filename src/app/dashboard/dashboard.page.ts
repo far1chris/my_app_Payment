@@ -24,6 +24,8 @@ export class DashboardPage implements OnInit {
   public layout = inject(LayoutService);
   private apiService = inject(ApiService);
   public dashboardData: any = null;
+
+  customHBarData: { label: string, value: number, icon: string, color: string }[] = [];
   public isExportDropdownOpen = false;
 
   constructor() {
@@ -42,6 +44,19 @@ export class DashboardPage implements OnInit {
     this.apiService.getDashboardStats().subscribe({
       next: (data) => {
         this.dashboardData = data;
+        // Initialize custom HBar data for HTML rendering (with mockup values as robust fallback)
+        const consultCats = this.dashboardData.consultCategories || {
+          labels: ['สมอง', 'ทรวงอก', 'ดวงตา'],
+          values: [110, 80, 50]
+        };
+        const colors = ['#f89b71', '#2dd4bf', '#3b82f6']; // Orange, Teal, Blue from mockup
+        const icons = ['fluent-emoji-flat:brain', 'fluent-emoji-flat:lungs', 'fluent-emoji-flat:eye'];
+        this.customHBarData = consultCats.labels.map((label: string, index: number) => ({
+          label,
+          value: consultCats.values[index],
+          icon: icons[index] || 'fluent-emoji-flat:clipboard',
+          color: colors[index] || '#cbd5e1'
+        }));
       },
       error: (err) => {
         console.error('Failed to load dashboard data', err);
@@ -239,13 +254,19 @@ export class DashboardPage implements OnInit {
   public doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: '75%',
-    plugins: { legend: { position: 'right' } }
+    cutout: '80%',
+    plugins: { 
+      legend: { display: false } 
+    }
   };
   public doughnutChartData: ChartData<'doughnut'> = {
-    labels: ['ส่งต่อเคส', 'Tele Consult'],
+    labels: ['ส่งต่อเคส\t\t800 เคส', 'Tele Consult\t200 เคส'],
     datasets: [
-      { data: [800, 200], backgroundColor: ['#fb7185', '#fbbf24'], borderWidth: 0 }
+      { 
+        data: [800, 200], 
+        backgroundColor: ['#fb7185', '#fbbf24'],
+        borderWidth: 0
+      }
     ]
   };
 
@@ -257,12 +278,18 @@ export class DashboardPage implements OnInit {
       y: { border: { display: false } },
       x: { grid: { display: false }, border: { display: false } }
     },
-    plugins: { legend: { position: 'top', align: 'end' } }
+    plugins: { 
+      legend: { 
+        position: 'top', 
+        align: 'end',
+        labels: { usePointStyle: true, boxWidth: 8, padding: 20, font: { family: 'Prompt', size: 12 } }
+      } 
+    }
   };
   public clusteredBarData: ChartData<'bar'> = {
     labels: ['สมอง', 'ทรวงอก', 'ดวงตา'],
     datasets: [
-      { label: 'รอรับรับ', data: [50, 70, 20], backgroundColor: '#fbbf24', borderRadius: 4 },
+      { label: 'รอตอบรับ', data: [50, 70, 20], backgroundColor: '#fbbf24', borderRadius: 4 },
       { label: 'การนัดสำเร็จ', data: [120, 180, 60], backgroundColor: '#2dd4bf', borderRadius: 4 },
       { label: 'ปฏิเสธการนัด', data: [30, 100, 10], backgroundColor: '#fb7185', borderRadius: 4 }
     ]
