@@ -741,6 +741,7 @@ ion-content {
       line-height: 1.2;
       border: 1px solid #f1f5f9;
       pointer-events: none;
+      white-space: nowrap;
 
       .percent {
         font-size: 0.85rem;

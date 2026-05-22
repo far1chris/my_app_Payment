@@ -45,38 +45,44 @@ def add_case(date, priority, status=None):
     })
     id_counter += 1
 
-# Let's populate the cases exactly as required to match the mockup metrics!
-# Total March 2024 (มีนาคม 2567) cases = 100
-# Urgent = 20, Normal = 80
+from datetime import datetime, timedelta
 
-# 1. Specific day: March 27, 2024 -> 3 Urgent, 1 Normal
+# Let's populate the cases relative to today's date so the dynamic dashboard works!
+today = datetime.now()
+
+def get_date_str(days_offset):
+    d = today + timedelta(days=days_offset)
+    return d.strftime("%d/%m/%Y")
+
+# 1. Specific day: Today (offset 0) -> 3 Urgent, 1 Normal
 for _ in range(3):
-    add_case("27/03/2024", "Urgent")
+    add_case(get_date_str(0), "Urgent")
 for _ in range(1):
-    add_case("27/03/2024", "Normal")
+    add_case(get_date_str(0), "Normal")
 
-# 2. Specific day: March 28, 2024 -> 5 Urgent, 12 Normal
+# 2. Specific day: Tomorrow (offset 1) -> 5 Urgent, 12 Normal
 for _ in range(5):
-    add_case("28/03/2024", "Urgent")
+    add_case(get_date_str(1), "Urgent")
 for _ in range(12):
-    add_case("28/03/2024", "Normal")
+    add_case(get_date_str(1), "Normal")
 
-# 3. Specific day: March 29, 2024 -> 8 Urgent, 0 Normal
+# 3. Specific day: Day after tomorrow (offset 2) -> 8 Urgent, 0 Normal
 for _ in range(8):
-    add_case("29/03/2024", "Urgent")
+    add_case(get_date_str(2), "Urgent")
 
-# 4. Other March days -> 4 Urgent, 67 Normal (to make March total: 20 Urgent, 80 Normal)
-other_march_days = [f"{day:02d}/03/2024" for day in [5, 10, 12, 15, 20, 22, 25]]
+# 4. Other days in the current month -> 4 Urgent, 67 Normal
+# Generate some random days within the current month
+other_days = [get_date_str(random.randint(-15, 15)) for _ in range(10)]
 for _ in range(4):
-    add_case(random.choice(other_march_days), "Urgent")
+    add_case(random.choice(other_days), "Urgent")
 for _ in range(67):
-    add_case(random.choice(other_march_days), "Normal")
+    add_case(random.choice(other_days), "Normal")
 
-# 5. Specific day: April 3, 2024 -> 2 Urgent, 3 Normal
+# 5. Specific day: Offset 3 -> 2 Urgent, 3 Normal
 for _ in range(2):
-    add_case("03/04/2024", "Urgent")
+    add_case(get_date_str(3), "Urgent")
 for _ in range(3):
-    add_case("03/04/2024", "Normal")
+    add_case(get_date_str(3), "Normal")
 
 # Write to db.json
 db = {

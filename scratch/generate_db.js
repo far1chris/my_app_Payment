@@ -47,25 +47,42 @@ function addCase(date, priority, status) {
   idCounter++;
 }
 
-// 1. March 27, 2024 -> 3 Urgent, 1 Normal
-for (let i = 0; i < 3; i++) addCase("27/03/2024", "Urgent");
-for (let i = 0; i < 1; i++) addCase("27/03/2024", "Normal");
+// Let's populate the cases relative to today's date
+const today = new Date();
 
-// 2. March 28, 2024 -> 5 Urgent, 12 Normal
-for (let i = 0; i < 5; i++) addCase("28/03/2024", "Urgent");
-for (let i = 0; i < 12; i++) addCase("28/03/2024", "Normal");
+function getDateStr(daysOffset) {
+  const d = new Date(today);
+  d.setDate(today.getDate() + daysOffset);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+}
 
-// 3. March 29, 2024 -> 8 Urgent, 0 Normal
-for (let i = 0; i < 8; i++) addCase("29/03/2024", "Urgent");
+// 1. Today (offset 0) -> 3 Urgent, 1 Normal
+for (let i = 0; i < 3; i++) addCase(getDateStr(0), "Urgent");
+for (let i = 0; i < 1; i++) addCase(getDateStr(0), "Normal");
 
-// 4. Other March days -> 4 Urgent, 67 Normal (to make March total: 20 Urgent, 80 Normal)
-const otherMarchDays = [5, 10, 12, 15, 20, 22, 25].map(d => String(d).padStart(2, '0') + "/03/2024");
-for (let i = 0; i < 4; i++) addCase(randomChoice(otherMarchDays), "Urgent");
-for (let i = 0; i < 67; i++) addCase(randomChoice(otherMarchDays), "Normal");
+// 2. Tomorrow (offset 1) -> 5 Urgent, 12 Normal
+for (let i = 0; i < 5; i++) addCase(getDateStr(1), "Urgent");
+for (let i = 0; i < 12; i++) addCase(getDateStr(1), "Normal");
 
-// 5. April 3, 2024 -> 2 Urgent, 3 Normal
-for (let i = 0; i < 2; i++) addCase("03/04/2024", "Urgent");
-for (let i = 0; i < 3; i++) addCase("03/04/2024", "Normal");
+// 3. Day after tomorrow (offset 2) -> 8 Urgent, 0 Normal
+for (let i = 0; i < 8; i++) addCase(getDateStr(2), "Urgent");
+
+// 4. Other days in the current month -> 4 Urgent, 67 Normal
+for (let i = 0; i < 4; i++) {
+  const offset = randomInt(-15, 15);
+  addCase(getDateStr(offset), "Urgent");
+}
+for (let i = 0; i < 67; i++) {
+  const offset = randomInt(-15, 15);
+  addCase(getDateStr(offset), "Normal");
+}
+
+// 5. Offset 3 -> 2 Urgent, 3 Normal
+for (let i = 0; i < 2; i++) addCase(getDateStr(3), "Urgent");
+for (let i = 0; i < 3; i++) addCase(getDateStr(3), "Normal");
 
 const consults = [];
 let consultIdCounter = 1;

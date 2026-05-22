@@ -79,7 +79,7 @@
                       <img src="assets/icon/ic_report_monthly.png" alt="Monthly Cases" width="48" height="48" />
                       <div class="label-text">
                         <span class="text-muted">จำนวนเคสประจำเดือน</span>
-                        <strong class="text-blue-dark">มีนาคม 2567</strong>
+                        <strong class="text-blue-dark">{{ currentMonthLabel }}</strong>
                       </div>
                     </div>
                     <div class="value-text text-blue">{{ monthlyTotalCases }} <small>เคส</small></div>
@@ -128,7 +128,8 @@
             </ng-container>
 
             <ng-container *ngIf="activeTab === 'consult'">
-              <div class="charts-row">
+              <div class="stat-summary-card">
+                <div class="charts-row">
                 <div class="chart-card">
                   <h3 class="card-title">สถิติประเภทของการขอ Consult</h3>
                   <div class="custom-hbar-container">
@@ -159,11 +160,11 @@
                         <div class="c-label">เคสทั้งหมด</div>
                       </div>
 
-                      <div class="donut-badge badge-top-right" style="background: white !important;">
+                      <div class="donut-badge" [ngStyle]="badge1Position" style="background: white !important;">
                         <span class="percent">{{ referPercentage }} %</span>
                         <span class="text">ส่งต่อเคส</span>
                       </div>
-                      <div class="donut-badge badge-bottom-left" style="background: white !important;">
+                      <div class="donut-badge" [ngStyle]="badge2Position" style="background: white !important;">
                         <span class="percent">{{ telePercentage }} %</span>
                         <span class="text">Tele Consult</span>
                       </div>
@@ -251,6 +252,7 @@
                   </div>
 
                 </div>
+              </div>
               </div>
             </ng-container>
 

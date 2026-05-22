@@ -33,6 +33,7 @@ export class DashboardPage implements OnInit {
   public monthlyTotalCases: number = 0;
   public monthlyUrgentCases: number = 0;
   public monthlyNormalCases: number = 0;
+  public currentMonthLabel: string = '';
   public dailyStats: { dateStr: string, urgent: number, normal: number, isToday?: boolean }[] = [];
 
   // Real data consult stats
@@ -47,6 +48,9 @@ export class DashboardPage implements OnInit {
     chest: { success: 0, miss: 0 },
     eye: { success: 0, miss: 0 }
   };
+  
+  public badge1Position: any = { top: '-10px', right: '-10px', transform: 'none' };
+  public badge2Position: any = { bottom: '-10px', left: '-10px', transform: 'none' };
 
   constructor() {
     addIcons({ ellipsisHorizontalOutline, timeOutline, pushOutline, calendarOutline, chevronForwardOutline });
@@ -111,8 +115,20 @@ export class DashboardPage implements OnInit {
   }
 
   calculateXrayStats(xrays: any[]) {
-    // Filter March 2024 cases (Month = 3, Year = 2024 or 2567)
-    const marchCases = xrays.filter(item => {
+    const thaiMonths = [
+      'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+      'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+    ];
+    
+    const today = new Date();
+    const currentMonth = today.getMonth() + 1;
+    const currentYear = today.getFullYear();
+    const currentThaiYear = currentYear > 2500 ? currentYear : currentYear + 543;
+    
+    this.currentMonthLabel = `${thaiMonths[today.getMonth()]} ${currentThaiYear}`;
+
+    // Filter current month cases
+    const monthCases = xrays.filter(item => {
       if (!item.orderDate) return false;
       const dateParts = item.orderDate.split(' ')[0].split(/[\/\-]/);
       if (dateParts.length < 3) return false;
@@ -127,20 +143,31 @@ export class DashboardPage implements OnInit {
         d = parseInt(dateParts[2], 10);
       }
 
-      return m === 3 && (y === 2024 || y === 2567);
+      // Convert year to CE for comparison if it's in BE
+      let compareYear = y > 2500 ? y - 543 : y;
+      let compareCurrentYear = currentYear > 2500 ? currentYear - 543 : currentYear;
+
+      return m === currentMonth && compareYear === compareCurrentYear;
     });
 
-    this.monthlyTotalCases = marchCases.length;
-    this.monthlyUrgentCases = marchCases.filter(item => item.priority === 'Urgent').length;
-    this.monthlyNormalCases = marchCases.filter(item => item.priority === 'Normal').length;
+    this.monthlyTotalCases = monthCases.length;
+    this.monthlyUrgentCases = monthCases.filter(item => item.priority === 'Urgent').length;
+    this.monthlyNormalCases = monthCases.filter(item => item.priority === 'Normal').length;
 
-    // Daily Stats Carousel dates
-    const targetDates = [
-      { day: 27, month: 3, year: 2024, label: '27 มีนาคม 2567', isToday: true },
-      { day: 28, month: 3, year: 2024, label: '28 มีนาคม 2567' },
-      { day: 29, month: 3, year: 2024, label: '29 มีนาคม 2567' },
-      { day: 3, month: 4, year: 2024, label: '3 เมษายน 2567' }
-    ];
+    // Daily Stats Carousel dates (Today + next 3 days)
+    const targetDates = [];
+    for (let i = 0; i < 4; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() + i);
+      const thaiYearStr = d.getFullYear() > 2500 ? d.getFullYear() : d.getFullYear() + 543;
+      targetDates.push({
+        day: d.getDate(),
+        month: d.getMonth() + 1,
+        year: d.getFullYear(),
+        label: `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYearStr}`,
+        isToday: i === 0
+      });
+    }
 
     this.dailyStats = targetDates.map(target => {
       const dailyCases = xrays.filter(item => {
@@ -158,7 +185,10 @@ export class DashboardPage implements OnInit {
           d = parseInt(dateParts[2], 10);
         }
 
-        return d === target.day && m === target.month && (y === target.year || y === target.year + 543);
+        let itemCompareYear = y > 2500 ? y - 543 : y;
+        let targetCompareYear = target.year > 2500 ? target.year - 543 : target.year;
+
+        return d === target.day && m === target.month && itemCompareYear === targetCompareYear;
       });
 
       return {
@@ -199,6 +229,37 @@ export class DashboardPage implements OnInit {
         }
       ]
     };
+
+    // Calculate badge positions dynamically based on angles
+    if (this.consultsTotalCount > 0) {
+      const radius = 105; // Distance from center
+      const centerX = 100;
+      const centerY = 100;
+
+      const angle1 = (this.referCount / this.consultsTotalCount) * 360;
+      const midAngle1 = -90 + (angle1 / 2);
+      const rad1 = midAngle1 * (Math.PI / 180);
+      const x1 = centerX + radius * Math.cos(rad1);
+      const y1 = centerY + radius * Math.sin(rad1);
+      
+      this.badge1Position = {
+        left: `${x1}px`,
+        top: `${y1}px`,
+        transform: 'translate(-50%, -50%)'
+      };
+
+      const angle2 = (this.teleCount / this.consultsTotalCount) * 360;
+      const midAngle2 = -90 + angle1 + (angle2 / 2);
+      const rad2 = midAngle2 * (Math.PI / 180);
+      const x2 = centerX + radius * Math.cos(rad2);
+      const y2 = centerY + radius * Math.sin(rad2);
+      
+      this.badge2Position = {
+        left: `${x2}px`,
+        top: `${y2}px`,
+        transform: 'translate(-50%, -50%)'
+      };
+    }
 
     // Category breakdown for HBar (สมอง, ทรวงอก, ดวงตา)
     const categories = ['สมอง', 'ทรวงอก', 'ดวงตา'];
