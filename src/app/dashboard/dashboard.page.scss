@@ -1,18 +1,18 @@
 :host {
   display: block;
-  background: #F7F9FC !important;
+  background: #F0F4F8 !important;
   /* จัดระเบียบให้สีระบบส่วนบนเนียนเสมอกับ Header */
-  background-color: #F7F9FC !important;
+  background-color: #F0F4F8 !important;
 }
 
 ion-content {
-  --background: #F7F9FC !important;
-  background-color: #F7F9FC !important;
+  --background: #F0F4F8 !important;
+  background-color: #F0F4F8 !important;
 
   // เจาะทะลุเงาเข้าถึงแท็กรากฐานของคอมโพเนนต์ Ionic
   &::part(background) {
-    background: #F7F9FC !important;
-    background-color: #F7F9FC !important;
+    background: #F0F4F8 !important;
+    background-color: #F0F4F8 !important;
   }
 }
 
@@ -20,16 +20,16 @@ ion-content {
   min-height: 100vh;
   overflow-x: hidden;
   display: flex;
-  background: #F7F9FC !important;
-  background-color: #F7F9FC !important;
+  background: #F0F4F8 !important;
+  background-color: #F0F4F8 !important;
 }
 
 .main-content {
   flex: 1;
-  width: calc(100% - 250px);
-  margin-left: 250px;
-  background: #F7F9FC !important;
-  background-color: #F7F9FC !important;
+  width: calc(100% - 230px);
+  margin-left: 230px;
+  background: #F0F4F8 !important;
+  background-color: #F0F4F8 !important;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -42,14 +42,12 @@ ion-content {
 }
 
 .page-container {
-  padding: 24px;
+  padding: 16px 32px;
+  margin: 0;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  background: transparent !important;
-  background-color: transparent !important;
-  /* บังคับให้โปร่งใสเพื่อโชว์พื้นหลังระบบด้านหลัง */
+  gap: 24px;
 }
 
 .page-header-row {
@@ -163,18 +161,27 @@ ion-content {
 }
 
 /* =============================================================
-   ⭐️ MAIN CONTENT HOLDER CARD (สร้างกรอบครอบสีขาวใบใหญ่ให้เนื้อหาตาม Figma)
+   ⭐️ MAIN CONTENT HOLDER CARD
    ============================================================= */
 ::ng-deep {
   .main-dashboard-holder {
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-    border-radius: 16px !important;
-    padding: 24px !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02) !important;
-    border: 1px solid #eef2f6 !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important; 
+    box-shadow: none !important; 
+    border: none !important;
     width: 100% !important;
     display: block !important;
+  }
+
+  /* แก้ไขจุดขัดแย้งเชิงโครงสร้าง: ปรับให้โปร่งใสเพื่อโชว์ผังกระจกฝ้าของโครงแผ่นหลังได้อย่างนุ่มนวล ไม่ทึบขาวมาบังขอบเขต */
+  .card {
+    background: transparent !important;                    /* ✅ แก้ไข: ปรับให้โปร่งใสเพื่อมองทะลุเห็นเนื้อกระจกฝ้า */
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
   }
 }
 
@@ -186,14 +193,6 @@ ion-content {
   background-color: transparent !important;
 }
 
-/* ล้างเงาและการ์ดซ้อนของการ์ดย่อยเดิม เพื่อให้เนื้อหาเนียนไปกับกรอบครอบขาวใบใหม่ */
-.card {
-  background: transparent !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-}
-
 .card-title {
   font-size: 1.25rem;
   font-weight: 700;
@@ -202,8 +201,12 @@ ion-content {
 }
 
 .stat-summary-card {
-  background: transparent !important;
-  background-color: transparent !important;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  border: 1px solid #f1f5f9;
+  margin-bottom: 24px;
 
   .stat-header {
     display: flex;
@@ -481,7 +484,6 @@ ion-content {
 }
 
 .chart-card {
-
   .bar-chart-container,
   .donut-chart-container,
   .clustered-chart-container {

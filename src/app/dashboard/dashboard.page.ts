@@ -204,7 +204,7 @@ export class DashboardPage implements OnInit {
     const categories = ['สมอง', 'ทรวงอก', 'ดวงตา'];
     const colors = ['#f89b71', '#2dd4bf', '#3b82f6']; // Orange, Teal, Blue from mockup
     const bgClasses = ['bg-pink', 'bg-teal', 'bg-blue'];
-    const icons = ['fluent-emoji-flat:brain', 'fluent-emoji-flat:x-ray', 'fluent-emoji-flat:eye'];
+    const icons = ['ic_cat_brain.png', 'ic_cat_chest.png', 'ic_cat_eye.png'];
 
     // Find the max value to scale the bars correctly and avoid overflow
     const categoryValues = categories.map(cat => consults.filter(item => item.category === cat).length);
@@ -498,7 +498,7 @@ export class DashboardPage implements OnInit {
     scales: {
       y: {
         min: 0,
-        max: 200,
+        grace: '5%',
         ticks: {
           stepSize: 50,
           font: { family: 'Prompt', size: 11 }

@@ -29,7 +29,7 @@ export class XrayListPage implements OnInit {
   // Filters & State
   public searchTerm: string = '';
   public selectedPriority: string = 'All';
-  public activeTab: string = 'all';
+  public activeTab: string = 'brain';
   public selectedStatus: string = 'all';
 
   // Pagination

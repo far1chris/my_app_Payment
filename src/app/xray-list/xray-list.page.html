@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true" style="--background: #EEF2F8; background-color: #EEF2F8;">
+<ion-content [fullscreen]="true" style="--background: #F0F4F8; background-color: #F0F4F8;">
   <div class="layout-wrapper" [class.sidebar-collapsed]="layout.isSidebarCollapsed()">
     <app-sidebar></app-sidebar>
     
@@ -16,50 +16,42 @@
         </div>
 
         <!-- Tabs -->
-        <div class="tabs-pills">
-          <div class="tab-pill" [class.active]="activeTab === 'all'" (click)="setActiveTab('all')">ทั้งหมด <span class="badge">{{allXrayData.length}}</span></div>
-          <div class="tab-pill" [class.active]="activeTab === 'brain'" (click)="setActiveTab('brain')">สมอง (CT/MRI) <span class="badge">{{getTabCount('brain')}}</span></div>
-          <div class="tab-pill" [class.active]="activeTab === 'chest'" (click)="setActiveTab('chest')">ทรวงอก (XR) <span class="badge">{{getTabCount('chest')}}</span></div>
-          <div class="tab-pill" [class.active]="activeTab === 'eye'" (click)="setActiveTab('eye')">ดวงตา <span class="badge">{{getTabCount('eye')}}</span></div>
+        <div class="xray-tabs">
+          <div class="x-tab" [class.active]="activeTab === 'brain'" (click)="setActiveTab('brain')">รายการ X-ray สมอง <span class="badge">{{getTabCount('brain')}}</span></div>
+          <div class="x-tab" [class.active]="activeTab === 'chest'" (click)="setActiveTab('chest')">รายการ X-ray ทรวงอก <span class="badge">{{getTabCount('chest')}}</span></div>
+          <div class="x-tab" [class.active]="activeTab === 'eye'" (click)="setActiveTab('eye')">รายการ X-ray ดวงตา <span class="badge">{{getTabCount('eye')}}</span></div>
         </div>
 
         <!-- Filters & Summary Cards -->
-        <div class="summary-cards">
-          <div class="card stat-card" [class.active-stat]="selectedStatus === 'all'" (click)="setStatusFilter('all')">
-            <div class="icon-circle bg-blue-light">
-              <!-- Placeholder for head icon -->
-              <img src="https://api.iconify.design/fluent-emoji-flat:brain.svg" width="24" height="24" />
-            </div>
-            <div class="stat-info">
-              <span class="label">รายการทั้งหมด</span>
-              <div class="value-container">
-                <span class="value text-blue">{{ getStatusCount('all') }}</span> <span class="unit">เคส</span>
+        <div class="main-stats-row">
+          <div class="m-stat-card x-stat-all" [class.active-stat]="selectedStatus === 'all'" (click)="setStatusFilter('all')">
+            <div class="icon-label">
+              <img src="assets/icon/ic_cat_brain.png" width="48" height="48" />
+              <div class="label-text">
+                <span class="title">รายการทั้งหมด</span>
               </div>
             </div>
-          </div>
-          
-          <div class="card stat-card" [class.active-stat]="selectedStatus === 'pending'" (click)="setStatusFilter('pending')">
-            <div class="icon-circle bg-yellow-light">
-              <img src="https://api.iconify.design/flat-color-icons:document.svg" width="24" height="24" />
-            </div>
-            <div class="stat-info">
-              <span class="label">รอรับผล</span>
-              <div class="value-container">
-                <span class="value text-yellow">{{ getStatusCount('pending') }}</span> <span class="unit">เคส</span>
-              </div>
-            </div>
+            <div class="value-text">{{ getStatusCount('all') }} <small>เคส</small></div>
           </div>
 
-          <div class="card stat-card" [class.active-stat]="selectedStatus === 'completed'" (click)="setStatusFilter('completed')">
-            <div class="icon-circle bg-green-light">
-              <img src="https://api.iconify.design/flat-color-icons:approval.svg" width="24" height="24" />
-            </div>
-            <div class="stat-info">
-              <span class="label">ยืนยันผลวินิจฉัย</span>
-              <div class="value-container">
-                <span class="value text-green">{{ getStatusCount('completed') }}</span> <span class="unit">เคส</span>
+          <div class="m-stat-card x-stat-pending" [class.active-stat]="selectedStatus === 'pending'" (click)="setStatusFilter('pending')">
+            <div class="icon-label">
+              <img src="assets/icon/ic_wait_confirm.png" width="48" height="48" />
+              <div class="label-text">
+                <span class="title">รอยืนยันผล</span>
               </div>
             </div>
+            <div class="value-text">{{ getStatusCount('pending') }} <small>เคส</small></div>
+          </div>
+
+          <div class="m-stat-card x-stat-completed" [class.active-stat]="selectedStatus === 'completed'" (click)="setStatusFilter('completed')">
+            <div class="icon-label">
+              <img src="assets/icon/ic_confirmed_result.png" width="48" height="48" />
+              <div class="label-text">
+                <span class="title">ยืนยันผลวินิจฉัย</span>
+              </div>
+            </div>
+            <div class="value-text">{{ getStatusCount('completed') }} <small>เคส</small></div>
           </div>
         </div>
 

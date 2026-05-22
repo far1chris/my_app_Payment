@@ -1,24 +1,24 @@
 :host {
   display: block;
-  background-color: #F7F9FC !important;
+  background-color: #F0F4F8 !important;
 }
 
 ion-content {
-  --background: #F7F9FC !important;
-  background-color: #F7F9FC !important;
+  --background: #F0F4F8 !important;
+  background-color: #F0F4F8 !important;
 }
 
 .layout-wrapper {
   display: flex;
   min-height: 100vh;
-  background-color: #F7F9FC !important;
+  background-color: #F0F4F8 !important;
 }
 
 .main-content {
   flex: 1;
-  width: calc(100% - 250px);
-  margin-left: 250px;
-  background-color: #F7F9FC !important;
+  width: calc(100% - 230px);
+  margin-left: 230px;
+  background-color: #F0F4F8 !important;
   display: flex;
   flex-direction: column;
   transition: margin-left 0.3s ease, width 0.3s ease;
@@ -30,11 +30,18 @@ ion-content {
 }
 
 .page-container {
-  padding: 24px;
+  padding: 32px 40px;
+  margin: 16px;
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  /* Solid white card style from Figma */
+  background: #ffffff !important;
+  border-radius: 24px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02) !important;
+  border: 1px solid #f1f5f9 !important;
 }
 
 .page-header-row {
@@ -67,16 +74,18 @@ ion-content {
   &:hover { background: #1e293b; }
 }
 
-.tabs-pills {
+.xray-tabs {
   display: flex;
-  gap: 12px;
+  gap: 24px;
   overflow-x: auto;
+  border-bottom: 1px solid #e2e8f0; /* The long faint dividing line */
+  padding-bottom: 0px;
+  margin-top: 12px;
   
-  .tab-pill {
-    padding: 8px 16px;
+  .x-tab {
+    padding: 12px 0px 10px 0px;
     background: transparent;
-    color: var(--text-muted);
-    border-radius: 24px;
+    color: #64748b; /* Grey text */
     font-size: 0.95rem;
     font-weight: 500;
     cursor: pointer;
@@ -84,109 +93,125 @@ ion-content {
     align-items: center;
     gap: 8px;
     white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px; /* Overlap the container border */
+    transition: all 0.2s ease;
 
     .badge {
-      background: #e2e8f0;
-      color: var(--text-dark);
+      background: #f1f5f9;
+      color: #64748b;
       padding: 2px 8px;
       border-radius: 12px;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 600;
+      transition: all 0.2s ease;
     }
 
     &.active {
-      color: var(--primary-navy);
-      background: white;
-      border: 1px solid var(--primary-blue);
+      color: var(--primary-blue);
+      border-bottom-color: var(--primary-blue);
+      font-weight: 600;
       
       .badge {
-        background: #dbeafe;
+        background: #dbeafe; /* Light blue badge */
         color: var(--primary-blue);
       }
     }
-  }
-}
 
-.summary-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-
-.stat-card {
-  background: white;
-  border-radius: 12px;
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  border: 1.5px solid #cbd5e1;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &.active-stat {
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 1px var(--primary-blue), 0 4px 12px rgba(37, 99, 235, 0.08);
-  }
-
-  &:hover {
-    transform: translateY(-2px);
-    border-color: var(--primary-blue);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
-  }
-
-  .icon-circle {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &.bg-blue-light { background: #eff6ff; }
-    &.bg-yellow-light { background: #fefce8; }
-    &.bg-green-light { background: #f0fdf4; }
-  }
-
-  .stat-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex: 1;
-
-    .label {
-      color: var(--text-dark);
-      font-weight: 600;
-      font-size: 0.95rem;
+    &:hover:not(.active) {
+      color: #475569;
     }
-    
-    .value-container {
+  }
+}
+
+.main-stats-row {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+
+  .m-stat-card {
+    border-radius: 20px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 0;
+    flex: 1; /* Stretch to fill container */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.015);
+    border: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    background: white;
+
+    &.active-stat {
+      border-color: var(--primary-blue) !important;
+      background-color: #f8fafc !important; /* Very light blue/gray for active state */
+      box-shadow: 0 0 0 1.5px var(--primary-blue), 0 4px 12px rgba(37, 99, 235, 0.08) !important;
+    }
+
+    &.x-stat-all {
+      .value-text { color: var(--primary-blue); }
+    }
+
+    &.x-stat-pending {
+      .value-text { color: #f97316; /* Orange */ }
+    }
+
+    &.x-stat-completed {
+      .value-text { color: #22c55e; /* Green */ }
+    }
+
+    .icon-label {
       display: flex;
-      align-items: baseline;
-      gap: 4px;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex-shrink: 0;
 
-      .value {
-        font-size: 1.5rem;
-        font-weight: 700;
-      }
-      .unit {
-        color: var(--text-muted);
+      img { flex-shrink: 0; }
+
+      .label-text {
+        display: flex;
+        flex-direction: column;
         font-size: 0.85rem;
-      }
+        color: #64748b;
+        white-space: nowrap;
 
-      .text-blue { color: var(--primary-blue); }
-      .text-yellow { color: #eab308; }
-      .text-green { color: #22c55e; }
+        .title {
+          font-size: 0.95rem;
+          color: #1e293b;
+          font-weight: 700;
+        }
+      }
+    }
+
+    .value-text {
+      font-size: 1.85rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      line-height: 1;
+      white-space: nowrap;
+      margin-left: 16px;
+
+      small {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #64748b; /* Grey text for 'เคส' */
+        font-family: 'Prompt', sans-serif;
+      }
     }
   }
 }
 
 .table-card {
-  background: white;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
   display: flex;
   flex-direction: column;
   gap: 20px;

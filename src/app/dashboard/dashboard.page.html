@@ -1,12 +1,12 @@
-<ion-content [fullscreen]="true" style="--background: #F7F9FC !important; background-color: #F7F9FC !important;">
+<ion-content [fullscreen]="true" style="--background: #F0F4F8 !important; background-color: #F0F4F8 !important;">
   <div class="layout-wrapper" [class.sidebar-collapsed]="layout.isSidebarCollapsed()"
-    style="background-color: #F7F9FC !important;">
+    style="background-color: #F0F4F8 !important;">
     <app-sidebar></app-sidebar>
 
-    <div class="main-content" style="background-color: #F7F9FC !important;">
+    <div class="main-content" style="background-color: #F0F4F8 !important;">
       <app-header></app-header>
 
-      <div class="page-container" style="background-color: transparent !important;">
+      <div class="page-container">
 
         <div class="page-header-row">
           <h1 class="page-title">Dashboard</h1>
@@ -76,18 +76,7 @@
                 <div class="main-stats-row">
                   <div class="m-stat-card card-monthly" style="background-color: #FEF9F5 !important;">
                     <div class="icon-label">
-                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="24" cy="24" r="24" fill="#FFF2F4" />
-                        <rect x="12" y="10" width="24" height="28" rx="4" fill="white" stroke="#FFE2E6"
-                          stroke-width="2" />
-                        <rect x="16" y="16" width="16" height="3" rx="1.5" fill="#FFE2E6" />
-                        <rect x="16" y="22" width="12" height="3" rx="1.5" fill="#FFE2E6" />
-                        <rect x="16" y="28" width="8" height="3" rx="1.5" fill="#FFE2E6" />
-                        <circle cx="34" cy="30" r="9" fill="#FF4D78" stroke="white" stroke-width="2" />
-                        <path
-                          d="M34 32C34 32 31.5 30.5 31.5 29C31.5 27.9 32.4 27.2 33.4 27.5C34 27.7 34 28.2 34 28.2C34 28.2 34 27.7 34.6 27.5C35.6 27.2 36.5 27.9 36.5 29C36.5 30.5 34 32 34 32Z"
-                          fill="white" />
-                      </svg>
+                      <img src="assets/icon/ic_report_monthly.png" alt="Monthly Cases" width="48" height="48" />
                       <div class="label-text">
                         <span class="text-muted">จำนวนเคสประจำเดือน</span>
                         <strong class="text-blue-dark">มีนาคม 2567</strong>
@@ -98,17 +87,7 @@
 
                   <div class="m-stat-card card-urgent" style="background-color: #fff2f4 !important;">
                     <div class="icon-label">
-                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 18H14" stroke="#FF4D4D" stroke-width="2" stroke-linecap="round" />
-                        <path d="M4 24H12" stroke="#FF4D4D" stroke-width="2.5" stroke-linecap="round" />
-                        <path d="M7 30H13" stroke="#FF4D4D" stroke-width="2" stroke-linecap="round" />
-                        <rect x="18" y="16" width="24" height="18" rx="4" fill="#FFEBEB" stroke="#FF4D4D"
-                          stroke-width="2" />
-                        <path d="M26 16V13C26 11.9 26.9 11 28 11H32C33.1 11 34 11.9 34 13V16" stroke="#FF4D4D"
-                          stroke-width="2" stroke-linecap="round" />
-                        <path d="M30 21V29" stroke="#FF4D4D" stroke-width="2.5" stroke-linecap="round" />
-                        <path d="M26 25H34" stroke="#FF4D4D" stroke-width="2.5" stroke-linecap="round" />
-                      </svg>
+                      <img src="assets/icon/ic_medkit_fast.png" alt="Urgent Cases" width="48" height="48" />
                       <span class="label-text">เคสด่วน</span>
                     </div>
                     <div class="value-text text-red">{{ monthlyUrgentCases }} <small>เคส</small></div>
@@ -116,14 +95,7 @@
 
                   <div class="m-stat-card card-normal" style="background-color: #ebfdf5 !important;">
                     <div class="icon-label">
-                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="12" y="16" width="24" height="18" rx="4" fill="#EBFDF5" stroke="#10B981"
-                          stroke-width="2" />
-                        <path d="M20 16V13C20 11.9 20.9 11 22 11H26C27.1 11 28 11.9 28 13V16" stroke="#10B981"
-                          stroke-width="2" stroke-linecap="round" />
-                        <path d="M24 21V29" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" />
-                        <path d="M20 25H28" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" />
-                      </svg>
+                      <img src="assets/icon/ic_medkit.png" alt="Normal Cases" width="48" height="48" />
                       <span class="label-text">เคสปกติ</span>
                     </div>
                     <div class="value-text text-green">{{ monthlyNormalCases }} <small>เคส</small></div>
@@ -162,7 +134,9 @@
                   <div class="custom-hbar-container">
                     <div class="ch-item" *ngFor="let item of customHBarData">
                       <div class="ch-header">
-                        <img [src]="'https://api.iconify.design/' + item.icon + '.svg'" class="ch-icon" />
+                        <div class="ch-icon" [ngClass]="item.bgClass">
+                          <img [src]="'assets/icon/' + item.icon" width="24" height="24" />
+                        </div>
                         <span class="ch-label">{{item.label}}</span>
                       </div>
                       <div class="ch-bar-row">
@@ -224,7 +198,7 @@
 
                   <div class="consult-box" style="background: #f5f7fc !important;">
                     <div class="c-left-col" style="background: transparent !important;">
-                      <div class="c-icon"><img src="https://api.iconify.design/fluent-emoji-flat:brain.svg" width="36"
+                      <div class="c-icon"><img src="assets/icon/ic_cat_brain.png" width="36"
                           height="36" /></div>
                       <strong>สมอง</strong>
                     </div>
@@ -242,7 +216,7 @@
 
                   <div class="consult-box" style="background: #f5f7fc !important;">
                     <div class="c-left-col" style="background: transparent !important;">
-                      <div class="c-icon"><img src="https://api.iconify.design/fluent-emoji-flat:x-ray.svg" width="36"
+                      <div class="c-icon"><img src="assets/icon/ic_cat_chest.png" width="36"
                           height="36" /></div>
                       <strong>ทรวงอก</strong>
                     </div>
@@ -260,7 +234,7 @@
 
                   <div class="consult-box" style="background: #f5f7fc !important;">
                     <div class="c-left-col" style="background: transparent !important;">
-                      <div class="c-icon"><img src="https://api.iconify.design/fluent-emoji-flat:eye.svg" width="36"
+                      <div class="c-icon"><img src="assets/icon/ic_cat_eye.png" width="36"
                           height="36" /></div>
                       <strong>ดวงตา</strong>
                     </div>

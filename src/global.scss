@@ -197,9 +197,8 @@ body {
 
 /* CSS Variables — no !important (invalid on custom props) */
 :root {
-  --ion-background-color: #F7F9FC;
-  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
-  --ion-background-color-rgb: 247, 249, 252;
+  --ion-background-color: #F0F4F8;
+  --ion-background-color-rgb: 240, 244, 248;
 }
 
 /* Real CSS properties — !important is valid here */
@@ -218,23 +217,18 @@ ion-content::part(background) {
 
 /* Angular/Ionic routing wrapper */
 .ion-page {
-  background-color: #F7F9FC !important;
-  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
+  background-color: #F0F4F8 !important;
 }
 
 /* ion-content host — CSS var without !important */
 ion-content {
-  --background: #F7F9FC;
-  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
-  background-color: #F7F9FC !important;
-  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
+  --background: #F0F4F8;
+  background-color: #F0F4F8 !important;
 }
 
-/* Scoped layout containers */
 app-dashboard .layout-wrapper,
 app-dashboard .main-content,
 app-xray-list .layout-wrapper,
 app-xray-list .main-content {
-  background-color: #F7F9FC !important;
-  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
+  background-color: #F0F4F8 !important;
 }
