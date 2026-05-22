@@ -1,55 +1,105 @@
-<ion-content [fullscreen]="true" class="login-content">
-  <!-- Wavy Background Decorators -->
-  <div class="bg-shape shape-tl"></div>
-  <div class="bg-shape shape-br"></div>
+<ion-content [fullscreen]="true" class="login-content" style="--background: #f4f6fa !important; background-color: #f4f6fa !important;">
+  <!-- Figma solid curved vector background decorators (without borders/outlines) -->
+  <div class="figma-bg-curve curve-top"></div>
+  <div class="figma-bg-curve curve-bottom"></div>
 
   <div class="login-container">
     <div class="login-card">
-      <!-- Left Side: AI Branding -->
+      <!-- Left Side: Dark Blue AI Branding & Illustration -->
       <div class="login-left">
-        <div class="top-logo">
-          <div class="logo-circle">
-            <ion-icon name="git-network-outline"></ion-icon>
-          </div>
-          <span>Manage AI</span>
+        <!-- Background particles overlay -->
+        <div class="bg-particles-overlay" style="background-image: url('assets/login_left_bg.png');"></div>
+        
+        <!-- Floating Space Crystals -->
+        <div class="meteor-shower">
+          <div class="space-crystal crystal-1"></div>
+          <div class="space-crystal crystal-2"></div>
+          <div class="space-crystal crystal-3"></div>
         </div>
         
-        <div class="illustration">
-          <img src="assets/ai_robot_xray.png" alt="AI Robot" />
+        <!-- Manage AI Badge (Figma specifications matched 100%) -->
+        <div class="manage-ai-badge">
+          <img src="assets/manage_ai_logo.png" alt="Manage AI" class="badge-logo" />
         </div>
-
-        <div class="left-footer">
-          <h2>AI - CXR SCREENING</h2>
+        
+        <!-- Robot Illustration Container for responsive scaling -->
+        <div class="robot-illustration-container">
+          <img src="assets/login_left_robot.png" alt="AI Robot X-Ray" class="robot-illustration-img" />
+        </div>
+        
+        <!-- Bottom HTML Caption -->
+        <div class="left-banner-footer">
+          <span>AI - CXR SCREENING</span>
         </div>
       </div>
 
       <!-- Right Side: Login Options -->
       <div class="login-right">
+        <!-- 1LIFE System Logo -->
         <div class="brand-logo">
-          <span class="blue-light">1</span><span class="blue-dark">LIFE</span> <span class="sys-text">System</span>
+          <!-- Stylized isometric "1" logo -->
+          <svg class="one-logo-svg" width="30" height="38" viewBox="0 0 30 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 16.5L12 5.5L16 9.5L4 20.5L0 16.5Z" fill="url(#cyan_grad_1)"/>
+            <path d="M11 10.5L21.5 0.5H29V37.5H19.5V10.5H11Z" fill="url(#cyan_grad_2)"/>
+            <path d="M19.5 10.5V37.5H14V16L19.5 10.5Z" fill="url(#cyan_grad_3)"/>
+            <defs>
+              <linearGradient id="cyan_grad_1" x1="0" y1="5.5" x2="16" y2="20.5" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#38bdf8"/>
+                <stop offset="1" stop-color="#0ea5e9"/>
+              </linearGradient>
+              <linearGradient id="cyan_grad_2" x1="21.5" y1="0.5" x2="29" y2="37.5" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#2563eb"/>
+                <stop offset="1" stop-color="#1d4ed8"/>
+              </linearGradient>
+              <linearGradient id="cyan_grad_3" x1="14" y1="10.5" x2="19.5" y2="37.5" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#0284c7"/>
+                <stop offset="1" stop-color="#0369a1"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          
+          <div class="brand-text">
+            <span class="life-text">1LIFE</span>
+            <span class="system-text">System</span>
+          </div>
         </div>
-        
-        <p class="subtitle">
-          เข้าสู่ระบบด้วยบัญชี <span class="provider-id-logo">PROVIDER <strong>ID</strong></span> ของคุณ
-        </p>
-        
+
+        <!-- Subtitle showing PROVIDER ID logo -->
+        <div class="subtitle-container">
+          <span class="sub-prefix">เข้าสู่ระบบด้วยบัญชี</span>
+          <div class="provider-logo-container">
+            <span class="provider-text">PROVIDER</span>
+            <span class="id-box">
+              <span class="id-text">ID</span>
+              <span class="badge-dot"></span>
+            </span>
+          </div>
+          <span class="sub-suffix">ของคุณ</span>
+        </div>
+
+        <!-- Action Buttons -->
         <div class="action-buttons">
           <button type="button" class="btn-primary" (click)="login()">
             ลงชื่อเข้าใช้งาน
           </button>
-          
-          <button type="button" class="btn-outline">
+
+          <button type="button" class="btn-outline" (click)="login()">
             ลงทะเบียน
           </button>
         </div>
 
+        <!-- Horizontal Divider -->
         <div class="divider">
           <span>หรือ</span>
         </div>
 
-        <button type="button" class="btn-one-id">
-          <span class="one-platform-logo"><strong>ONE</strong> <small>PLATFORM</small></span>
-          เข้าสู่ระบบด้วย ONE ID
+        <!-- ONE ID Sign In Option -->
+        <button type="button" class="btn-one-id" (click)="login()">
+          <div class="one-platform-logo">
+            <span class="one-text">ONE</span>
+            <span class="platform-text">PLATFORM</span>
+          </div>
+          <span class="btn-text">เข้าสู่ระบบด้วย ONE ID</span>
         </button>
       </div>
     </div>
