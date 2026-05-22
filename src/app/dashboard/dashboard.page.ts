@@ -11,13 +11,14 @@ import { ellipsisHorizontalOutline, timeOutline, pushOutline, calendarOutline, c
 import { ApiService } from '../services/api.service';
 import { LayoutService } from '../services/layout.service';
 import * as ExcelJS from 'exceljs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
-  imports: [IonContent, CommonModule, FormsModule, SidebarComponent, HeaderComponent, BaseChartDirective, IonIcon]
+  imports: [IonContent, CommonModule, FormsModule, SidebarComponent, HeaderComponent, BaseChartDirective, IonIcon, RouterLink]
 })
 export class DashboardPage implements OnInit {
   activeTab: 'xray' | 'consult' = 'xray';
