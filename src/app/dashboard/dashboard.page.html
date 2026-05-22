@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="main-stats-row">
-                  <div class="m-stat-card card-monthly" style="background-color: #FEF9F5 !important;">
+                  <div class="m-stat-card card-monthly">
                     <div class="icon-label">
                       <img src="assets/icon/ic_report_monthly.png" alt="Monthly Cases" width="48" height="48" />
                       <div class="label-text">
@@ -85,7 +85,7 @@
                     <div class="value-text text-blue">{{ monthlyTotalCases }} <small>เคส</small></div>
                   </div>
 
-                  <div class="m-stat-card card-urgent" style="background-color: #fff2f4 !important;">
+                  <div class="m-stat-card card-urgent">
                     <div class="icon-label">
                       <img src="assets/icon/ic_medkit_fast.png" alt="Urgent Cases" width="48" height="48" />
                       <span class="label-text">เคสด่วน</span>
@@ -93,7 +93,7 @@
                     <div class="value-text text-red">{{ monthlyUrgentCases }} <small>เคส</small></div>
                   </div>
 
-                  <div class="m-stat-card card-normal" style="background-color: #ebfdf5 !important;">
+                  <div class="m-stat-card card-normal">
                     <div class="icon-label">
                       <img src="assets/icon/ic_medkit.png" alt="Normal Cases" width="48" height="48" />
                       <span class="label-text">เคสปกติ</span>
@@ -103,8 +103,7 @@
                 </div>
 
                 <div class="date-scroller">
-                  <div class="date-item" [class.today-active]="stat.isToday" *ngFor="let stat of dailyStats"
-                    style="background: white !important;">
+                  <div class="date-item" [class.today-active]="stat.isToday" *ngFor="let stat of dailyStats">
                     <div class="date-header">
                       <span class="day-badge" *ngIf="stat.isToday">TODAY</span>
                       <span class="date-text">{{stat.dateStr}}</span>
@@ -153,6 +152,7 @@
                   <h3 class="card-title">สถิติรูปแบบการ Consult</h3>
                   <div class="donut-chart-wrapper">
                     <div class="donut-chart-left">
+                      <div class="donut-track"></div>
                       <canvas baseChart [data]="doughnutChartData" [options]="doughnutChartOptions"
                         type="doughnut"></canvas>
                       <div class="donut-center-text">

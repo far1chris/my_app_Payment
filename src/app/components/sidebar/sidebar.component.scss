@@ -1,12 +1,15 @@
 .sidebar {
   width: 230px;
-  height: 100vh;
+  height: calc(100vh - 32px);
+  margin: 16px;
+  border-radius: 24px;
   background-color: transparent;
   background-image: linear-gradient(rgba(255, 255, 255, 0.64), rgba(255, 255, 255, 0.55)), url('../../../assets/bg_sidebar.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border-right: 1px solid rgba(255, 255, 255, 0.6);
+  border-right: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Added slight shadow for the floating effect */
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -19,7 +22,8 @@
 }
 
 .sidebar-header {
-  padding: 8px 4px 24px 4px;
+  padding: 8px 4px 32px 4px;
+  /* Increased bottom padding for more space */
   display: flex;
   align-items: center;
   gap: 16px;
@@ -28,7 +32,8 @@
   .hamburger-btn {
     background: transparent;
     border: none;
-    color: #2344a6; /* Royal blue hamburger */
+    color: #2344a6;
+    /* Royal blue hamburger */
     font-size: 1.5rem;
     cursor: pointer;
     display: flex;
@@ -36,7 +41,7 @@
     justify-content: center;
     padding: 6px;
     transition: all 0.2s;
-    
+
     &:hover {
       background: #e2e8f0;
       border-radius: 8px;
@@ -50,15 +55,31 @@
     font-weight: 800;
     font-family: 'Prompt', sans-serif;
     letter-spacing: -0.5px;
-    
-    .blue-light { color: #0a6cff; font-size: 1.6rem; font-weight: 900; line-height: 1; }
-    .blue-dark { color: #1d3fa3; margin-left: 2px; }
-    .sys-text { color: #2344a6; font-weight: 500; font-size: 1.05rem; margin-left: 4px; }
+
+    .blue-light {
+      color: #0a6cff;
+      font-size: 1.6rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .blue-dark {
+      color: #1d3fa3;
+      margin-left: 2px;
+    }
+
+    .sys-text {
+      color: #2344a6;
+      font-weight: 500;
+      font-size: 1.05rem;
+      margin-left: 4px;
+    }
   }
 }
 
 .sidebar-menu {
-  padding: 8px 0;
+  padding: 16px 0 8px 0;
+  /* Increased top padding for extra space below header */
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -68,11 +89,11 @@
 .menu-item-wrapper {
   display: flex;
   flex-direction: column;
-  background: #ffffff;
+  background: #ffffff; /* Always white box as per new image */
   border-radius: 16px;
   padding: 8px;
   margin-bottom: 16px;
-  border: 1px solid #eef2f6;
+  border: 1px solid transparent; /* No blue border */
   box-shadow: 0 4px 12px rgba(35, 68, 166, 0.015);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -82,7 +103,8 @@
   align-items: center;
   gap: 12px;
   padding: 12px 12px;
-  color: #1e293b; /* Dark navy text */
+  color: #1e293b;
+  /* Dark navy text */
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 700;
@@ -93,32 +115,35 @@
 
   ion-icon {
     font-size: 1.25rem;
-    color: #2344a6; /* Royal blue icons */
+    color: #2344a6;
+    /* Royal blue icons */
     transition: color 0.2s;
   }
 
   .toggle-icon {
     margin-left: auto;
     font-size: 1rem;
-    color: #2344a6; /* Always royal blue toggle icon as in image */
+    color: #2344a6;
+    /* Always royal blue toggle icon as in image */
     transition: transform 0.2s ease;
   }
 
   &:hover {
-    background: #f8fafc; /* Modern soft background on hover */
+    background: #f8fafc;
+    /* Modern soft background on hover */
   }
 }
 
 /* Color section headers active/blue when expanded */
 .menu-item-wrapper.expanded {
   .menu-item {
-    color: #2344a6; /* Royal blue active header */
-    
-    ion-icon {
       color: #2344a6;
     }
-    
+
     .toggle-icon {
+      color: #2344a6;
+
+    ion-icon {
       color: #2344a6;
     }
   }
@@ -133,7 +158,8 @@
 
   .submenu-item {
     padding: 10px 16px;
-    color: #334155; /* Dark gray for high contrast */
+    color: #334155;
+    /* Dark gray for high contrast */
     text-decoration: none;
     font-size: 0.85rem;
     font-weight: 600;
@@ -149,11 +175,14 @@
     }
 
     &.active {
-      background: #2344a6; /* Figma dark royal blue capsule */
-      color: #ffffff; /* White text */
+      background: #2344a6;
+      /* Figma dark royal blue capsule */
+      color: #ffffff;
+      /* White text */
       font-weight: 700;
-      box-shadow: none; /* No bulky shadows */
-      
+      box-shadow: none;
+      /* No bulky shadows */
+
       &:hover {
         background: #1d3fa3;
         color: #ffffff;
@@ -167,8 +196,8 @@
   width: 80px;
   padding: 24px 8px;
 
-  .brand-logo, 
-  .menu-item span, 
+  .brand-logo,
+  .menu-item span,
   .toggle-icon,
   .submenu {
     display: none !important;
@@ -190,7 +219,7 @@
     padding: 0;
     width: 100%;
     height: 100%;
-    
+
     ion-icon {
       font-size: 1.4rem;
       margin: 0;

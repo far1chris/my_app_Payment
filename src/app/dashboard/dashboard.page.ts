@@ -48,7 +48,7 @@ export class DashboardPage implements OnInit {
     chest: { success: 0, miss: 0 },
     eye: { success: 0, miss: 0 }
   };
-  
+
   public badge1Position: any = { top: '-10px', right: '-10px', transform: 'none' };
   public badge2Position: any = { bottom: '-10px', left: '-10px', transform: 'none' };
 
@@ -119,12 +119,12 @@ export class DashboardPage implements OnInit {
       'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
       'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
     ];
-    
+
     const today = new Date();
     const currentMonth = today.getMonth() + 1;
     const currentYear = today.getFullYear();
     const currentThaiYear = currentYear > 2500 ? currentYear : currentYear + 543;
-    
+
     this.currentMonthLabel = `${thaiMonths[today.getMonth()]} ${currentThaiYear}`;
 
     // Filter current month cases
@@ -224,24 +224,30 @@ export class DashboardPage implements OnInit {
       datasets: [
         {
           data: [this.referCount, this.teleCount],
-          backgroundColor: ['#fb7185', '#fbbf24'],
-          borderWidth: 0
+          backgroundColor: ['#f58a93', '#eab263'],
+          borderWidth: 0,
+          spacing: 4,
+          borderRadius: 20
         }
       ]
     };
 
     // Calculate badge positions dynamically based on angles
     if (this.consultsTotalCount > 0) {
-      const radius = 105; // Distance from center
       const centerX = 100;
       const centerY = 100;
+      const radius = 95; // Position badges so they slightly overlap the chart perfectly
 
+      // Calculate angles based on the data
+      // ChartJS starts at -90 degrees (top center) and draws clockwise.
+      // Wait, we need to ensure the order matches the datasets.
+      // The dataset is: referCount (pink), teleCount (yellow)
       const angle1 = (this.referCount / this.consultsTotalCount) * 360;
       const midAngle1 = -90 + (angle1 / 2);
       const rad1 = midAngle1 * (Math.PI / 180);
       const x1 = centerX + radius * Math.cos(rad1);
       const y1 = centerY + radius * Math.sin(rad1);
-      
+
       this.badge1Position = {
         left: `${x1}px`,
         top: `${y1}px`,
@@ -253,7 +259,7 @@ export class DashboardPage implements OnInit {
       const rad2 = midAngle2 * (Math.PI / 180);
       const x2 = centerX + radius * Math.cos(rad2);
       const y2 = centerY + radius * Math.sin(rad2);
-      
+
       this.badge2Position = {
         left: `${x2}px`,
         top: `${y2}px`,
@@ -536,18 +542,21 @@ export class DashboardPage implements OnInit {
   public doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: '80%',
+    cutout: '72%',
     plugins: {
       legend: { display: false }
-    }
+    },
+    layout: { padding: 0 }
   };
   public doughnutChartData: ChartData<'doughnut'> = {
     labels: ['ส่งต่อเคส\t\t800 เคส', 'Tele Consult\t200 เคส'],
     datasets: [
       {
         data: [800, 200],
-        backgroundColor: ['#fb7185', '#fbbf24'],
-        borderWidth: 0
+        backgroundColor: ['#f58a93', '#eab263'],
+        borderWidth: 0,
+        spacing: 4,
+        borderRadius: 20
       }
     ]
   };
