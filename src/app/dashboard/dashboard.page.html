@@ -142,6 +142,10 @@
                 <div class="stat-summary-card" style="margin-bottom: 0;">
                   <div class="chart-card">
                     <h3 class="card-title">สถิติประเภทของการขอ Consult</h3>
+                    <!-- Hidden canvas for Excel export capture -->
+                    <div style="position: absolute; left: -9999px; top: -9999px; width: 600px; height: 320px; opacity: 0; pointer-events: none;">
+                      <canvas baseChart [data]="horizontalBarData" [options]="horizontalBarOptions" type="bar"></canvas>
+                    </div>
                     <div class="custom-hbar-container">
                       <div class="ch-item" *ngFor="let item of customHBarData">
                         <div class="ch-header">

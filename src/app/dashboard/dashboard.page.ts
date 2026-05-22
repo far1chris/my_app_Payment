@@ -366,152 +366,473 @@ export class DashboardPage implements OnInit {
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Dashboard Stats');
 
-    // 1. Column Widths
-    sheet.columns = [
-      { width: 25 }, { width: 20 }, { width: 20 }, { width: 20 }
-    ];
+    if (this.activeTab === 'xray') {
+      // 1. Column Layout: clean 4-column dedicated X-ray statistics layout
+      sheet.columns = [
+        { width: 30 }, // Column A: รายการ/วันที่
+        { width: 18 }, // Column B: เคสปกติ (เคส)
+        { width: 18 }, // Column C: เคสด่วน (เคส)
+        { width: 18 }  // Column D: รวม (เคส)
+      ];
 
-    // 2. Main Title
-    sheet.mergeCells('A1:D2');
-    const title = sheet.getCell('A1');
-    title.value = 'รายงานสรุปสถิติ 1LIFE System';
-    title.font = { size: 16, bold: true, color: { argb: 'FFFFFFFF' }, name: 'Prompt' };
-    title.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF102A6B' } };
-    title.alignment = { vertical: 'middle', horizontal: 'center' };
+      // 2. Main Title merged A1:D2 (Dark blue banner)
+      sheet.mergeCells('A1:D2');
+      const title = sheet.getCell('A1');
+      title.value = `รายงานสรุปสถิติ X-ray (ประจำเดือน ${this.currentMonthLabel})`;
+      title.font = { size: 16, bold: true, color: { argb: 'FFFFFFFF' }, name: 'Prompt' };
+      title.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF102A6B' } };
+      title.alignment = { vertical: 'middle', horizontal: 'center' };
 
-    let currentRow = 4;
+      // 3. Section 1: สถิติการนัดหมาย X-ray ประจำเดือน
+      sheet.mergeCells('A4:D4');
+      const secTitle1 = sheet.getCell('A4');
+      secTitle1.value = 'สถิติการนัดหมาย X-ray ประจำเดือน';
+      secTitle1.font = { size: 12, bold: true, name: 'Prompt' };
+      secTitle1.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' } };
+      secTitle1.alignment = { vertical: 'middle', horizontal: 'left' };
 
-    const addSection = (title: string, headers: string[], dataRows: any[]) => {
-      // Section Title
-      sheet.mergeCells(`A${currentRow}:D${currentRow}`);
-      const secTitle = sheet.getCell(`A${currentRow}`);
-      secTitle.value = title;
-      secTitle.font = { size: 12, bold: true, name: 'Prompt' };
-      secTitle.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' } };
-      secTitle.alignment = { vertical: 'middle', horizontal: 'left' };
-      currentRow++;
-
-      // Headers
-      const headerRow = sheet.getRow(currentRow);
-      headerRow.values = headers;
-      headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' }, name: 'Prompt' };
-      headerRow.eachCell((c) => {
+      // Headers for Section 1 (Row 5)
+      const row5 = sheet.getRow(5);
+      row5.getCell(1).value = 'ประเภทเคส';
+      row5.getCell(2).value = 'จำนวน (เคส)';
+      
+      [row5.getCell(1), row5.getCell(2)].forEach(c => {
+        c.font = { bold: true, color: { argb: 'FFFFFFFF' }, name: 'Prompt' };
         c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF3B82F6' } };
         c.alignment = { vertical: 'middle', horizontal: 'center' };
         c.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
       });
-      currentRow++;
 
-      // Data
-      dataRows.forEach(rowValues => {
-        const row = sheet.getRow(currentRow);
-        row.values = rowValues;
+      // Data for Section 1 (Rows 6-8)
+      const row6 = sheet.getRow(6);
+      row6.getCell(1).value = 'เคสปกติ';
+      row6.getCell(2).value = this.monthlyNormalCases;
+
+      const row7 = sheet.getRow(7);
+      row7.getCell(1).value = 'เคสด่วน';
+      row7.getCell(2).value = this.monthlyUrgentCases;
+
+      const row8 = sheet.getRow(8);
+      row8.getCell(1).value = 'เคสทั้งหมด (รวม)';
+      row8.getCell(2).value = this.monthlyTotalCases;
+
+      [row6, row7, row8].forEach((row, i) => {
+        row.getCell(1).font = { name: 'Prompt', bold: i === 2 };
+        row.getCell(1).alignment = { vertical: 'middle', horizontal: 'left' };
+        row.getCell(1).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+
+        row.getCell(2).font = { name: 'Prompt', bold: i === 2 };
+        row.getCell(2).alignment = { vertical: 'middle', horizontal: 'center' };
+        row.getCell(2).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+
+        if (i === 2) {
+          row.getCell(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' } };
+          row.getCell(2).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' } };
+        }
+      });
+
+      // 4. Section 2: สถิติการนัดหมาย X-ray รายวัน (Daily Stats)
+      sheet.mergeCells('A10:D10');
+      const secTitle2 = sheet.getCell('A10');
+      secTitle2.value = 'สถิติการนัดหมาย X-ray รายวัน (Daily Stats)';
+      secTitle2.font = { size: 12, bold: true, name: 'Prompt' };
+      secTitle2.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' } };
+      secTitle2.alignment = { vertical: 'middle', horizontal: 'left' };
+
+      // Headers for Section 2 (Row 11)
+      const row11 = sheet.getRow(11);
+      row11.values = ['วันที่', 'เคสปกติ (เคส)', 'เคสด่วน (เคส)', 'รวม (เคส)'];
+      row11.font = { bold: true, color: { argb: 'FFFFFFFF' }, name: 'Prompt' };
+      row11.eachCell((c) => {
+        c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF3B82F6' } };
+        c.alignment = { vertical: 'middle', horizontal: 'center' };
+        c.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+      });
+
+      // Data for Section 2 (Rows 12+)
+      let rIndex = 12;
+      this.dailyStats.forEach(stat => {
+        const row = sheet.getRow(rIndex);
+        const total = stat.normal + stat.urgent;
+        row.values = [stat.dateStr, stat.normal, stat.urgent, total];
         row.font = { name: 'Prompt' };
-        row.eachCell((c, colNumber) => {
-          c.alignment = { vertical: 'middle', horizontal: colNumber === 1 ? 'left' : 'center' };
+
+        row.getCell(1).alignment = { vertical: 'middle', horizontal: 'left' };
+        row.getCell(2).alignment = { vertical: 'middle', horizontal: 'center' };
+        row.getCell(3).alignment = { vertical: 'middle', horizontal: 'center' };
+        row.getCell(4).alignment = { vertical: 'middle', horizontal: 'center' };
+
+        for (let col = 1; col <= 4; col++) {
+          row.getCell(col).border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+          if (stat.isToday) {
+            row.getCell(col).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE0F2FE' } }; // Light blue highlight for today
+            row.getCell(col).font = { name: 'Prompt', bold: true };
+          }
+        }
+        rIndex++;
+      });
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'xray_dashboard_stats.xlsx';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+    } else {
+      // EXISTING APPROVED PREMIUM CONSULT EXPORT
+      // Helper to generate premium high-resolution white card for charts
+      const generatePremiumChartCard = (canvas: HTMLCanvasElement, title: string, cardHeight: number = 450): string => {
+        const cardWidth = 800;
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = cardWidth;
+        tempCanvas.height = cardHeight;
+        const ctx = tempCanvas.getContext('2d');
+        
+        if (!ctx) return canvas.toDataURL('image/png');
+
+        // 1. Draw smooth white card background with rounded corners
+        ctx.fillStyle = '#FFFFFF';
+        const r = 24; // smooth rounded corners
+        ctx.beginPath();
+        ctx.moveTo(r, 0);
+        ctx.arcTo(cardWidth, 0, cardWidth, cardHeight, r);
+        ctx.arcTo(cardWidth, cardHeight, 0, cardHeight, r);
+        ctx.arcTo(0, cardHeight, 0, 0, r);
+        ctx.arcTo(0, 0, cardWidth, 0, r);
+        ctx.closePath();
+        ctx.fill();
+
+        // 2. Card outline border (slate-200)
+        ctx.strokeStyle = '#E2E8F0';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // 3. Card Title (Slate-900)
+        ctx.fillStyle = '#0F172A';
+        ctx.font = 'bold 22px Prompt, sans-serif';
+        ctx.fillText(title, 32, 45);
+
+        // 4. Subtle card header divider
+        ctx.strokeStyle = '#F1F5F9';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(32, 65);
+        ctx.lineTo(cardWidth - 32, 65);
+        ctx.stroke();
+
+        // 5. Draw and scale original chart canvas inside card body
+        const paddingX = 40;
+        const paddingY = 90;
+        const availWidth = cardWidth - paddingX * 2;
+        const availHeight = cardHeight - paddingY - 30;
+
+        const chartAspect = canvas.width / canvas.height;
+        const targetAspect = availWidth / availHeight;
+        
+        let drawWidth = availWidth;
+        let drawHeight = availHeight;
+        
+        if (chartAspect > targetAspect) {
+          drawHeight = availWidth / chartAspect;
+        } else {
+          drawWidth = availHeight * chartAspect;
+        }
+
+        const drawX = paddingX + (availWidth - drawWidth) / 2;
+        const drawY = paddingY + (availHeight - drawHeight) / 2;
+
+        ctx.drawImage(canvas, drawX, drawY, drawWidth, drawHeight);
+
+        // 6. Draw center text & floating percentage badges specifically for Donut chart to match visual excellence
+        if (title === 'สถิติรูปแบบการ Consult') {
+          const centerX = drawX + drawWidth / 2;
+          const centerY = drawY + drawHeight / 2;
+
+          // Draw center total count (e.g. 1,000)
+          ctx.fillStyle = '#1E3A8A';
+          ctx.font = 'bold 28px Prompt, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(this.consultsTotalCount.toLocaleString(), centerX, centerY - 12);
+
+          // Draw center label
+          ctx.fillStyle = '#64748B';
+          ctx.font = '500 12px Prompt, sans-serif';
+          ctx.fillText('เคสทั้งหมด', centerX, centerY + 14);
+
+          // Draw floating badges
+          const drawBadge = (bx: number, by: number, percentStr: string, labelStr: string) => {
+            const w = 100;
+            const h = 46;
+            const rx = bx - w / 2;
+            const ry = by - h / 2;
+            const br = 10; // border radius
+
+            // Shadow
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.06)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 4;
+
+            // Background
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.moveTo(rx + br, ry);
+            ctx.arcTo(rx + w, ry, rx + w, ry + h, br);
+            ctx.arcTo(rx + w, ry + h, rx, ry + h, br);
+            ctx.arcTo(rx, ry + h, rx, ry, br);
+            ctx.arcTo(rx, ry, rx + w, ry, br);
+            ctx.closePath();
+            ctx.fill();
+
+            // Reset shadow to avoid affecting text/border
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+
+            // Border (slate-200)
+            ctx.strokeStyle = '#E2E8F0';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Percentage Text
+            ctx.fillStyle = '#0F172A';
+            ctx.font = 'bold 14px Prompt, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.fillText(percentStr, bx, ry + 6);
+
+            // Label Text
+            ctx.fillStyle = '#64748B';
+            ctx.font = '500 10px Prompt, sans-serif';
+            ctx.fillText(labelStr, bx, ry + 24);
+          };
+
+          // Positions (Radius of 105px places them elegantly over donut slices)
+          const radius = 105;
+          
+          // Badge 1 (Refer: 80% at 54 degrees)
+          const rad1 = 54 * (Math.PI / 180);
+          const b1X = centerX + radius * Math.cos(rad1);
+          const b1Y = centerY + radius * Math.sin(rad1);
+          drawBadge(b1X, b1Y, `${this.referPercentage} %`, 'ส่งต่อเคส');
+
+          // Badge 2 (Tele: 20% at 234 degrees)
+          const rad2 = 234 * (Math.PI / 180);
+          const b2X = centerX + radius * Math.cos(rad2);
+          const b2Y = centerY + radius * Math.sin(rad2);
+          drawBadge(b2X, b2Y, `${this.telePercentage} %`, 'Tele Consult');
+        }
+
+        return tempCanvas.toDataURL('image/png');
+      };
+
+      // 1. Column Layout: Left side for data, spacer column, and wide right pane for chart cards
+      sheet.columns = [
+        { width: 25 }, { width: 20 }, { width: 20 }, { width: 20 }, // columns A to D
+        { width: 5 },  // column E (spacer column separating grid and chart card panel)
+        { width: 14 }, { width: 14 }, { width: 14 }, { width: 14 }, // columns F to I
+        { width: 14 }, { width: 14 }, { width: 14 }, { width: 14 }  // columns J to M
+      ];
+
+      // 2. Main Title spanning the entire dashboard sheet (Columns A to M)
+      sheet.mergeCells('A1:M2');
+      const title = sheet.getCell('A1');
+      title.value = 'รายงานสรุปสถิติ 1LIFE System';
+      title.font = { size: 16, bold: true, color: { argb: 'FFFFFFFF' }, name: 'Prompt' };
+      title.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF102A6B' } };
+      title.alignment = { vertical: 'middle', horizontal: 'center' };
+
+      // 3. Fill the right side pane (Columns E to M) with light grayish-blue background (#F0F4F8)
+      // This turns off visual gridlines and acts as a beautiful canvas container for the white card panels.
+      for (let r = 3; r <= 50; r++) {
+        const row = sheet.getRow(r);
+        for (let c = 5; c <= 13; c++) {
+          const cell = row.getCell(c);
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFF0F4F8' }
+          };
+        }
+      }
+
+      let currentRow = 4;
+
+      const addSection = (title: string, headers: string[], dataRows: any[]) => {
+        // Section Title
+        sheet.mergeCells(`A${currentRow}:D${currentRow}`);
+        const secTitle = sheet.getCell(`A${currentRow}`);
+        secTitle.value = title;
+        secTitle.font = { size: 12, bold: true, name: 'Prompt' };
+        secTitle.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' } };
+        secTitle.alignment = { vertical: 'middle', horizontal: 'left' };
+        currentRow++;
+
+        // Headers
+        const headerRow = sheet.getRow(currentRow);
+        headerRow.values = headers;
+        headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' }, name: 'Prompt' };
+        headerRow.eachCell((c) => {
+          c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF3B82F6' } };
+          c.alignment = { vertical: 'middle', horizontal: 'center' };
           c.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
         });
         currentRow++;
-      });
 
-      currentRow += 2; // spacing
-    };
+        // Data
+        dataRows.forEach(rowValues => {
+          const row = sheet.getRow(currentRow);
+          row.values = rowValues;
+          row.font = { name: 'Prompt' };
+          row.eachCell((c, colNumber) => {
+            c.alignment = { vertical: 'middle', horizontal: colNumber === 1 ? 'left' : 'center' };
+            c.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+          });
+          currentRow++;
+        });
 
-    // Data for sections
-    const hBarLabels = this.horizontalBarData.labels as string[];
-    const hBarData = this.horizontalBarData.datasets[0].data as number[];
-    addSection('สถิติประเภทของการขอ Consult', ['ประเภท', 'จำนวน (เคส)'], hBarLabels.map((lbl, i) => [lbl, hBarData[i]]));
+        currentRow += 2; // spacing
+      };
 
-    const donutLabels = this.doughnutChartData.labels as string[];
-    const donutData = this.doughnutChartData.datasets[0].data as number[];
-    addSection('สถิติรูปแบบการ Consult', ['รูปแบบ', 'จำนวน (เคส)'], donutLabels.map((lbl, i) => [lbl, donutData[i]]));
+      // Data for sections
+      const hBarLabels = this.horizontalBarData.labels as string[];
+      const hBarData = this.horizontalBarData.datasets[0].data as number[];
+      addSection('สถิติประเภทของการขอ Consult', ['ประเภท', 'จำนวน (เคส)'], hBarLabels.map((lbl, i) => [lbl, hBarData[i]]));
 
-    const clusterLabels = this.clusteredBarData.labels as string[];
-    const clusterDatasets = this.clusteredBarData.datasets;
-    addSection('สถิติแยกตามสถานะ', ['ประเภท', 'รอรับ', 'การนัดสำเร็จ', 'ปฏิเสธการนัด'],
-      clusterLabels.map((lbl, i) => [lbl, clusterDatasets[0].data[i], clusterDatasets[1].data[i], clusterDatasets[2].data[i]])
-    );
+      const donutLabels = this.doughnutChartData.labels as string[];
+      const donutData = this.doughnutChartData.datasets[0].data as number[];
+      addSection('สถิติรูปแบบการ Consult', ['รูปแบบ', 'จำนวน (เคส)'], donutLabels.map((lbl, i) => [lbl, donutData[i]]));
 
-    // Embed chart images with correct aspect ratios
-    const canvases = document.querySelectorAll('canvas');
-    if (canvases.length >= 3) {
-      const c1 = canvases[0] as HTMLCanvasElement;
-      const c2 = canvases[1] as HTMLCanvasElement;
-      const c3 = canvases[2] as HTMLCanvasElement;
+      const clusterLabels = this.clusteredBarData.labels as string[];
+      const clusterDatasets = this.clusteredBarData.datasets;
+      addSection('สถิติแยกตามสถานะ', ['ประเภท', 'รอรับ', 'การนัดสำเร็จ', 'ปฏิเสธการนัด'],
+        clusterLabels.map((lbl, i) => [lbl, clusterDatasets[0].data[i], clusterDatasets[1].data[i], clusterDatasets[2].data[i]])
+      );
 
-      // Fill transparent backgrounds with white before capturing (optional, but good for excel)
-      // We will just grab toDataURL for now, ChartJS background is transparent by default but excel handles it ok
-      const img1 = workbook.addImage({ base64: c1.toDataURL('image/png'), extension: 'png' });
-      const img2 = workbook.addImage({ base64: c2.toDataURL('image/png'), extension: 'png' });
-      const img3 = workbook.addImage({ base64: c3.toDataURL('image/png'), extension: 'png' });
+      // Embed premium card chart images
+      const canvases = document.querySelectorAll('canvas');
+      if (canvases.length >= 3) {
+        try {
+          const c1 = canvases[0] as HTMLCanvasElement;
+          const c2 = canvases[1] as HTMLCanvasElement;
+          const c3 = canvases[2] as HTMLCanvasElement;
 
-      // Calculate width/height to avoid stretching. Let's scale down by 1.5
-      sheet.addImage(img1, { tl: { col: 5, row: 3 }, ext: { width: Math.round(c1.width * 0.7), height: Math.round(c1.height * 0.7) } });
-      sheet.addImage(img2, { tl: { col: 5, row: 13 }, ext: { width: Math.round(c2.width * 0.7), height: Math.round(c2.height * 0.7) } });
-      sheet.addImage(img3, { tl: { col: 5, row: 28 }, ext: { width: Math.round(c3.width * 0.7), height: Math.round(c3.height * 0.7) } });
+          // Generate high-resolution, solid white cards with rounded corners and titles for Excel embedding
+          const card1Data = generatePremiumChartCard(c1, 'สถิติประเภทของการขอ Consult', 450);
+          const card2Data = generatePremiumChartCard(c2, 'สถิติรูปแบบการ Consult', 450);
+          const card3Data = generatePremiumChartCard(c3, 'สถิติแยกตามสถานะ', 520); // slightly taller for detailed clustered chart
+
+          const img1 = workbook.addImage({ base64: card1Data, extension: 'png' });
+          const img2 = workbook.addImage({ base64: card2Data, extension: 'png' });
+          const img3 = workbook.addImage({ base64: card3Data, extension: 'png' });
+
+          // Add premium chart cards with clean retina display sizing (scaled perfectly inside the light-blue panel)
+          sheet.addImage(img1, { tl: { col: 5, row: 3 }, ext: { width: 500, height: 280 } });
+          sheet.addImage(img2, { tl: { col: 5, row: 18 }, ext: { width: 500, height: 280 } });
+          sheet.addImage(img3, { tl: { col: 5, row: 33 }, ext: { width: 500, height: 325 } });
+        } catch (err) {
+          console.error('Failed to embed chart images in Excel:', err);
+        }
+      }
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'consult_dashboard_stats.xlsx';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
-
-    const buffer = await workbook.xlsx.writeBuffer();
-    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'dashboard_stats.xlsx';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   }
 
   exportToCsv() {
     this.closeExportDropdown();
     const csvRows: string[] = [];
 
-    // 1. สถิติประเภทของการขอ Consult
-    csvRows.push('สถิติประเภทของการขอ Consult');
-    csvRows.push('ประเภท,จำนวน (เคส)');
-    const hBarLabels = this.horizontalBarData.labels as string[];
-    const hBarData = this.horizontalBarData.datasets[0].data as number[];
-    hBarLabels.forEach((label, index) => {
-      csvRows.push(`${label},${hBarData[index]}`);
-    });
-    csvRows.push('');
-
-    // 2. สถิติรูปแบบการ Consult
-    csvRows.push('สถิติรูปแบบการ Consult');
-    csvRows.push('รูปแบบ,จำนวน (เคส)');
-    const donutLabels = this.doughnutChartData.labels as string[];
-    const donutData = this.doughnutChartData.datasets[0].data as number[];
-    donutLabels.forEach((label, index) => {
-      csvRows.push(`${label},${donutData[index]}`);
-    });
-    csvRows.push('');
-
-    // 3. สถิติแยกตามสถานะ
-    csvRows.push('สถิติแยกตามสถานะ');
-    const clusterLabels = this.clusteredBarData.labels as string[];
-    const clusterDatasets = this.clusteredBarData.datasets;
-    const clusterHeader = ['ประเภท', ...clusterDatasets.map(ds => ds.label)];
-    csvRows.push(clusterHeader.join(','));
-
-    clusterLabels.forEach((label, i) => {
-      const row = [label];
-      clusterDatasets.forEach(ds => {
-        row.push(ds.data[i]?.toString() || '0');
+    if (this.activeTab === 'xray') {
+      csvRows.push(`รายงานสรุปสถิติ X-ray (ประจำเดือน ${this.currentMonthLabel})`);
+      csvRows.push('');
+      csvRows.push('สถิติการนัดหมาย X-ray ประจำเดือน');
+      csvRows.push('ประเภทเคส,จำนวน (เคส)');
+      csvRows.push(`เคสปกติ,${this.monthlyNormalCases}`);
+      csvRows.push(`เคสด่วน,${this.monthlyUrgentCases}`);
+      csvRows.push(`เคสทั้งหมด (รวม),${this.monthlyTotalCases}`);
+      csvRows.push('');
+      csvRows.push('สถิติการนัดหมาย X-ray รายวัน (Daily Stats)');
+      csvRows.push('วันที่,เคสปกติ (เคส),เคสด่วน (เคส),รวม (เคส)');
+      this.dailyStats.forEach(stat => {
+        const total = stat.normal + stat.urgent;
+        csvRows.push(`${stat.dateStr},${stat.normal},${stat.urgent},${total}`);
       });
-      csvRows.push(row.join(','));
-    });
 
-    const csvData = csvRows.join('\n');
-    const blob = new Blob(['\uFEFF' + csvData], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
+      const csvData = csvRows.join('\n');
+      const blob = new Blob(['\uFEFF' + csvData], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
 
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', 'dashboard_stats.csv');
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'xray_dashboard_stats.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } else {
+      // EXISTING APPROVED CSV EXPORT FOR CONSULT
+      csvRows.push('สถิติประเภทของการขอ Consult');
+      csvRows.push('ประเภท,จำนวน (เคส)');
+      const hBarLabels = this.horizontalBarData.labels as string[];
+      const hBarData = this.horizontalBarData.datasets[0].data as number[];
+      hBarLabels.forEach((label, index) => {
+        csvRows.push(`${label},${hBarData[index]}`);
+      });
+      csvRows.push('');
+
+      // 2. สถิติรูปแบบการ Consult
+      csvRows.push('สถิติรูปแบบการ Consult');
+      csvRows.push('รูปแบบ,จำนวน (เคส)');
+      const donutLabels = this.doughnutChartData.labels as string[];
+      const donutData = this.doughnutChartData.datasets[0].data as number[];
+      donutLabels.forEach((label, index) => {
+        csvRows.push(`${label},${donutData[index]}`);
+      });
+      csvRows.push('');
+
+      // 3. สถิติแยกตามสถานะ
+      csvRows.push('สถิติแยกตามสถานะ');
+      const clusterLabels = this.clusteredBarData.labels as string[];
+      const clusterDatasets = this.clusteredBarData.datasets;
+      const clusterHeader = ['ประเภท', ...clusterDatasets.map(ds => ds.label)];
+      csvRows.push(clusterHeader.join(','));
+
+      clusterLabels.forEach((label, i) => {
+        const row = [label];
+        clusterDatasets.forEach(ds => {
+          row.push(ds.data[i]?.toString() || '0');
+        });
+        csvRows.push(row.join(','));
+      });
+
+      const csvData = csvRows.join('\n');
+      const blob = new Blob(['\uFEFF' + csvData], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+
+      if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'consult_dashboard_stats.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
   }
 
