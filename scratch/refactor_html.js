@@ -1,6 +1,12 @@
+const fs = require('fs');
+const path = require('path');
+
+const filePath = path.join(__dirname, '../src/app/dashboard/dashboard.page.html');
+const html = fs.readFileSync(filePath, 'utf8');
+
+const newHtml = `
 <ion-content [fullscreen]="true" style="--background: #F0F4F8 !important; background-color: #F0F4F8 !important;">
-  <div class="layout-wrapper" [class.sidebar-collapsed]="layout.isSidebarCollapsed()"
-    style="background-color: #F0F4F8 !important;">
+  <div class="layout-wrapper" [class.sidebar-collapsed]="layout.isSidebarCollapsed()" style="background-color: #F0F4F8 !important;">
     <app-sidebar></app-sidebar>
 
     <div class="main-content" style="background-color: #F0F4F8 !important;">
@@ -26,8 +32,7 @@
               สถิติการนัดหมาย Consult</div>
           </div>
           <div class="d-tabs-right">
-            <span class="text-muted"><ion-icon name="time-outline"
-                style="margin-right: 6px; font-size: 1.1rem; vertical-align: -2px;"></ion-icon>ข้อมูลอัปเดท
+            <span class="text-muted"><ion-icon name="time-outline" style="margin-right: 6px; font-size: 1.1rem; vertical-align: -2px;"></ion-icon>ข้อมูลอัปเดท
               18/04/2567</span>
 
             <div class="export-dropdown-container">
@@ -118,8 +123,7 @@
                       </div>
                     </div>
                   </div>
-                  <button class="scroll-arrow" style="background: white !important;"><ion-icon
-                      name="chevron-forward-outline"></ion-icon></button>
+                  <button class="scroll-arrow" style="background: white !important;"><ion-icon name="chevron-forward-outline"></ion-icon></button>
                 </div>
 
                 <div class="scroller-dots">
@@ -133,13 +137,15 @@
 
           <!-- CONSULT VIEW -->
           <ng-container *ngIf="activeTab === 'consult'">
-            <div class="page-container">
-              <!-- Top Container: Header & Tabs -->
+            <!-- Top Container: Header & Tabs -->
+            <div class="page-container" style="margin-bottom: 20px;">
               <ng-container *ngTemplateOutlet="headerAndTabs"></ng-container>
+            </div>
 
-              <!-- Second Container: Charts Row -->
-              <div class="charts-row">
-                <div class="stat-summary-card" style="margin-bottom: 0;">
+            <!-- Second Container: Charts Row -->
+            <div class="page-container" style="margin-bottom: 20px;">
+              <div class="stat-summary-card" style="padding-bottom: 0;">
+                <div class="charts-row">
                   <div class="chart-card">
                     <h3 class="card-title">สถิติประเภทของการขอ Consult</h3>
                     <div class="custom-hbar-container">
@@ -151,23 +157,19 @@
                           <span class="ch-label">{{item.label}}</span>
                         </div>
                         <div class="ch-bar-row">
-                          <div class="ch-bar-fill" [style.width.%]="item.widthPercent"
-                            [style.background-color]="item.color"></div>
+                          <div class="ch-bar-fill" [style.width.%]="item.widthPercent" [style.background-color]="item.color"></div>
                           <span class="ch-value"><strong>{{item.value}}</strong> เคส</span>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="stat-summary-card" style="margin-bottom: 0;">
                   <div class="chart-card">
                     <h3 class="card-title">สถิติรูปแบบการ Consult</h3>
                     <div class="donut-chart-wrapper">
                       <div class="donut-chart-left">
                         <div class="donut-track"></div>
-                        <canvas baseChart [data]="doughnutChartData" [options]="doughnutChartOptions"
-                          type="doughnut"></canvas>
+                        <canvas baseChart [data]="doughnutChartData" [options]="doughnutChartOptions" type="doughnut"></canvas>
                         <div class="donut-center-text">
                           <div class="c-total">{{ consultsTotalCount | number }}</div>
                           <div class="c-label">เคสทั้งหมด</div>
@@ -199,9 +201,11 @@
                   </div>
                 </div>
               </div>
+            </div>
 
-              <!-- Third Container: Large Chart -->
-              <div class="stat-summary-card" style="margin-bottom: 0;">
+            <!-- Third Container: Large Chart -->
+            <div class="page-container" style="margin-bottom: 20px;">
+              <div class="stat-summary-card">
                 <div class="chart-card large-chart" style="margin-top: 0;">
                   <div class="clustered-chart-container">
                     <div class="chart-y-unit">เคส</div>
@@ -209,9 +213,11 @@
                   </div>
                 </div>
               </div>
+            </div>
 
-              <!-- Fourth Container: Bottom Consult Card -->
-              <div class="stat-summary-card" style="margin-bottom: 0;">
+            <!-- Fourth Container: Bottom Consult Card -->
+            <div class="page-container">
+              <div class="stat-summary-card">
                 <div class="bottom-consult-card" style="margin-top: 0;">
                   <h3 class="card-title">การนัด Consult</h3>
                   <div class="consult-stats-grid">
@@ -278,4 +284,8 @@
 
     </div>
   </div>
-</ion-content>\n
+</ion-content>
+`;
+
+fs.writeFileSync(filePath, newHtml.trim() + '\\n');
+console.log('HTML refactored perfectly!');

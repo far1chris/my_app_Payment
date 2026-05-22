@@ -29,8 +29,12 @@ export class SidebarComponent  implements OnInit {
     if (this.layout.isSidebarCollapsed()) {
       this.layout.toggleSidebar();
       this.isXrayMenuExpanded = true;
+      this.isDashboardMenuExpanded = false;
     } else {
       this.isXrayMenuExpanded = !this.isXrayMenuExpanded;
+      if (this.isXrayMenuExpanded) {
+        this.isDashboardMenuExpanded = false;
+      }
     }
   }
 
@@ -38,8 +42,12 @@ export class SidebarComponent  implements OnInit {
     if (this.layout.isSidebarCollapsed()) {
       this.layout.toggleSidebar();
       this.isDashboardMenuExpanded = true;
+      this.isXrayMenuExpanded = false;
     } else {
       this.isDashboardMenuExpanded = !this.isDashboardMenuExpanded;
+      if (this.isDashboardMenuExpanded) {
+        this.isXrayMenuExpanded = false;
+      }
     }
   }
 
