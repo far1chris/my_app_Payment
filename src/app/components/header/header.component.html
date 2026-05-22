@@ -1,19 +1,32 @@
 <header class="app-header">
   <div class="header-left">
-    <!-- Intentionally left blank as the logo is in the sidebar -->
-  </div>
-
-  <div class="header-right">
     <!-- Location Selector -->
     <div class="location-selector" [id]="'location-trigger-' + componentId" style="cursor: pointer;">
       <div class="hospital-icon">
-        <ion-icon name="medkit-outline"></ion-icon>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Folded Map Base -->
+          <!-- Left Fold (Green) -->
+          <path d="M3 6L9 3.5V18.5L3 21V6Z" fill="#34D399" />
+          <!-- Middle Fold (Pink) -->
+          <path d="M9 3.5L15 6V21L9 18.5V3.5Z" fill="#FCA5A5" />
+          <!-- Right Fold (Teal) -->
+          <path d="M15 6L21 3.5V18.5L15 21V6Z" fill="#059669" />
+          
+          <!-- Map Pin Overlay -->
+          <g filter="drop-shadow(0px 2px 4px rgba(0,0,0,0.15))">
+            <!-- Pin Body -->
+            <path d="M12 2C9.5 2 7.5 4 7.5 6.5C7.5 9.8 12 14.5 12 14.5C12 14.5 16.5 9.8 16.5 6.5C16.5 4 14.5 2 12 2Z" fill="#EF4444" />
+            <!-- White cross -->
+            <path d="M12 4.5V8.5M10 6.5H14" stroke="white" stroke-width="1.2" stroke-linecap="round" />
+          </g>
+        </svg>
       </div>
-      <span>: หน่วยบริการ A</span>
+      <span class="colon">:</span>
+      <span class="loc-text">หน่วยบริการ A</span>
       <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
     </div>
     
-    <ion-popover [trigger]="'location-trigger-' + componentId" triggerAction="click" alignment="center" class="premium-popover" [dismissOnSelect]="true">
+    <ion-popover [trigger]="'location-trigger-' + componentId" triggerAction="click" alignment="start" class="premium-popover" [dismissOnSelect]="true">
       <ng-template>
         <ion-content class="custom-popover-content">
           <div class="popover-header">
@@ -33,6 +46,9 @@
         </ion-content>
       </ng-template>
     </ion-popover>
+  </div>
+
+  <div class="header-right">
 
     <!-- Notifications -->
     <div class="notification-icon" [id]="'notification-trigger-' + componentId" style="cursor: pointer;">
@@ -65,11 +81,10 @@
     <!-- User Profile -->
     <div class="user-profile" [id]="'profile-trigger-' + componentId" style="cursor: pointer;">
       <div class="avatar">
-        <!-- Placeholder for user avatar -->
-        <img src="https://ui-avatars.com/api/?name=TN&background=e2e8f0&color=334155" alt="User" />
+        <img src="assets/user_avatar.png" alt="User" />
       </div>
       <div class="user-info">
-        <span class="user-name">นายพัชรพงศ์ จิตภักดี</span>
+        <span class="user-name">นายพัธรนัส จิตภักดี</span>
         <span class="user-role">เจ้าหน้าที่รังสี</span>
       </div>
       <ion-icon name="chevron-down-outline" class="dropdown-icon"></ion-icon>
@@ -80,10 +95,10 @@
         <ion-content class="custom-popover-content">
           <div class="profile-header">
             <div class="avatar-lg">
-              <img src="https://ui-avatars.com/api/?name=TN&background=e2e8f0&color=334155" alt="User" />
+              <img src="assets/user_avatar.png" alt="User" />
             </div>
             <div class="p-info">
-              <strong>นายพัชรพงศ์ จิตภักดี</strong>
+              <strong>นายพัธรนัส จิตภักดี</strong>
               <span>เจ้าหน้าที่รังสี</span>
             </div>
           </div>

@@ -25,8 +25,28 @@ export class DashboardPage implements OnInit {
   private apiService = inject(ApiService);
   public dashboardData: any = null;
 
-  customHBarData: { label: string, value: number, icon: string, color: string }[] = [];
+  customHBarData: { label: string, value: number, icon: string, color: string, bgClass: string, widthPercent: number }[] = [];
   public isExportDropdownOpen = false;
+
+  // Real data xray stats
+  public allXrayData: any[] = [];
+  public monthlyTotalCases: number = 0;
+  public monthlyUrgentCases: number = 0;
+  public monthlyNormalCases: number = 0;
+  public dailyStats: { dateStr: string, urgent: number, normal: number, isToday?: boolean }[] = [];
+
+  // Real data consult stats
+  public allConsultData: any[] = [];
+  public consultsTotalCount: number = 0;
+  public referCount: number = 0;
+  public teleCount: number = 0;
+  public referPercentage: number = 0;
+  public telePercentage: number = 0;
+  public consultCardsData = {
+    brain: { success: 0, miss: 0 },
+    chest: { success: 0, miss: 0 },
+    eye: { success: 0, miss: 0 }
+  };
 
   constructor() {
     addIcons({ ellipsisHorizontalOutline, timeOutline, pushOutline, calendarOutline, chevronForwardOutline });
@@ -41,6 +61,7 @@ export class DashboardPage implements OnInit {
   }
 
   async loadData() {
+    // 1. Get Consult Dashboard Stats
     this.apiService.getDashboardStats().subscribe({
       next: (data) => {
         this.dashboardData = data;
@@ -50,18 +71,218 @@ export class DashboardPage implements OnInit {
           values: [110, 80, 50]
         };
         const colors = ['#f89b71', '#2dd4bf', '#3b82f6']; // Orange, Teal, Blue from mockup
-        const icons = ['fluent-emoji-flat:brain', 'fluent-emoji-flat:lungs', 'fluent-emoji-flat:eye'];
+        const bgClasses = ['bg-pink', 'bg-teal', 'bg-blue'];
+        const icons = ['fluent-emoji-flat:brain', 'fluent-emoji-flat:x-ray', 'fluent-emoji-flat:eye'];
         this.customHBarData = consultCats.labels.map((label: string, index: number) => ({
           label,
           value: consultCats.values[index],
           icon: icons[index] || 'fluent-emoji-flat:clipboard',
-          color: colors[index] || '#cbd5e1'
+          color: colors[index] || '#cbd5e1',
+          bgClass: bgClasses[index] || 'bg-blue',
+          widthPercent: Math.round((consultCats.values[index] / 110) * 80)
         }));
       },
       error: (err) => {
         console.error('Failed to load dashboard data', err);
       }
     });
+
+    // 2. Get Real Xrays to calculate stats dynamically
+    this.apiService.getXrays().subscribe({
+      next: (xrays) => {
+        this.allXrayData = xrays;
+        this.calculateXrayStats(xrays);
+      },
+      error: (err) => {
+        console.error('Failed to load xray data', err);
+      }
+    });
+
+    // 3. Get Real Consults to calculate stats dynamically
+    this.apiService.getConsults().subscribe({
+      next: (consults) => {
+        this.allConsultData = consults;
+        this.calculateConsultStats(consults);
+      },
+      error: (err) => {
+        console.error('Failed to load consult data', err);
+      }
+    });
+  }
+
+  calculateXrayStats(xrays: any[]) {
+    // Filter March 2024 cases (Month = 3, Year = 2024 or 2567)
+    const marchCases = xrays.filter(item => {
+      if (!item.orderDate) return false;
+      const dateParts = item.orderDate.split(' ')[0].split(/[\/\-]/);
+      if (dateParts.length < 3) return false;
+
+      let d = parseInt(dateParts[0], 10);
+      let m = parseInt(dateParts[1], 10);
+      let y = parseInt(dateParts[2], 10);
+
+      if (dateParts[0].length === 4) {
+        y = parseInt(dateParts[0], 10);
+        m = parseInt(dateParts[1], 10);
+        d = parseInt(dateParts[2], 10);
+      }
+
+      return m === 3 && (y === 2024 || y === 2567);
+    });
+
+    this.monthlyTotalCases = marchCases.length;
+    this.monthlyUrgentCases = marchCases.filter(item => item.priority === 'Urgent').length;
+    this.monthlyNormalCases = marchCases.filter(item => item.priority === 'Normal').length;
+
+    // Daily Stats Carousel dates
+    const targetDates = [
+      { day: 27, month: 3, year: 2024, label: '27 มีนาคม 2567', isToday: true },
+      { day: 28, month: 3, year: 2024, label: '28 มีนาคม 2567' },
+      { day: 29, month: 3, year: 2024, label: '29 มีนาคม 2567' },
+      { day: 3, month: 4, year: 2024, label: '3 เมษายน 2567' }
+    ];
+
+    this.dailyStats = targetDates.map(target => {
+      const dailyCases = xrays.filter(item => {
+        if (!item.orderDate) return false;
+        const dateParts = item.orderDate.split(' ')[0].split(/[\/\-]/);
+        if (dateParts.length < 3) return false;
+
+        let d = parseInt(dateParts[0], 10);
+        let m = parseInt(dateParts[1], 10);
+        let y = parseInt(dateParts[2], 10);
+
+        if (dateParts[0].length === 4) {
+          y = parseInt(dateParts[0], 10);
+          m = parseInt(dateParts[1], 10);
+          d = parseInt(dateParts[2], 10);
+        }
+
+        return d === target.day && m === target.month && (y === target.year || y === target.year + 543);
+      });
+
+      return {
+        dateStr: target.label,
+        isToday: target.isToday || false,
+        urgent: dailyCases.filter(item => item.priority === 'Urgent').length,
+        normal: dailyCases.filter(item => item.priority === 'Normal').length
+      };
+    });
+  }
+
+  calculateConsultStats(consults: any[]) {
+    this.consultsTotalCount = consults.length;
+
+    // Method breakdown (ส่งต่อเคส, Tele Consult)
+    const referList = consults.filter(item => item.method === 'ส่งต่อเคส');
+    const teleList = consults.filter(item => item.method === 'Tele Consult');
+
+    this.referCount = referList.length;
+    this.teleCount = teleList.length;
+
+    if (this.consultsTotalCount > 0) {
+      this.referPercentage = Math.round((this.referCount / this.consultsTotalCount) * 100);
+      this.telePercentage = Math.round((this.teleCount / this.consultsTotalCount) * 100);
+    } else {
+      this.referPercentage = 0;
+      this.telePercentage = 0;
+    }
+
+    // Update Donut Chart Data
+    this.doughnutChartData = {
+      labels: [`ส่งต่อเคส\t\t${this.referCount} เคส`, `Tele Consult\t${this.teleCount} เคส`],
+      datasets: [
+        {
+          data: [this.referCount, this.teleCount],
+          backgroundColor: ['#fb7185', '#fbbf24'],
+          borderWidth: 0
+        }
+      ]
+    };
+
+    // Category breakdown for HBar (สมอง, ทรวงอก, ดวงตา)
+    const categories = ['สมอง', 'ทรวงอก', 'ดวงตา'];
+    const colors = ['#f89b71', '#2dd4bf', '#3b82f6']; // Orange, Teal, Blue from mockup
+    const bgClasses = ['bg-pink', 'bg-teal', 'bg-blue'];
+    const icons = ['fluent-emoji-flat:brain', 'fluent-emoji-flat:x-ray', 'fluent-emoji-flat:eye'];
+
+    // Find the max value to scale the bars correctly and avoid overflow
+    const categoryValues = categories.map(cat => consults.filter(item => item.category === cat).length);
+    const maxVal = Math.max(...categoryValues, 1);
+
+    this.customHBarData = categories.map((label, index) => {
+      const value = categoryValues[index];
+      const widthPercent = Math.round((value / maxVal) * 80); // max 80% width to prevent text overflow
+      return {
+        label,
+        value,
+        icon: icons[index] || 'fluent-emoji-flat:clipboard',
+        color: colors[index] || '#cbd5e1',
+        bgClass: bgClasses[index] || 'bg-blue',
+        widthPercent
+      };
+    });
+
+    // Update Horizontal Bar Chart Data (for Excel export)
+    this.horizontalBarData = {
+      labels: categories,
+      datasets: [
+        {
+          data: categories.map(cat => consults.filter(item => item.category === cat).length),
+          backgroundColor: ['#f97316', '#14b8a6', '#3b82f6'],
+          borderRadius: 4,
+          barThickness: 15
+        }
+      ]
+    };
+
+    // Clustered Bar Chart Data (รอตอบรับ, การนัดสำเร็จ, ปฏิเสธการนัด) per category
+    const waitData = categories.map(cat => consults.filter(item => item.category === cat && item.status === 'รอตอบรับ').length);
+    const successData = categories.map(cat => consults.filter(item => item.category === cat && item.status === 'การนัดสำเร็จ').length);
+    const rejectData = categories.map(cat => consults.filter(item => item.category === cat && item.status === 'ปฏิเสธการนัด').length);
+
+    this.clusteredBarData = {
+      labels: categories,
+      datasets: [
+        {
+          label: 'รอตอบรับ',
+          data: waitData,
+          backgroundColor: '#ffb356',
+          borderRadius: { topLeft: 12, topRight: 12 },
+          borderSkipped: 'bottom'
+        },
+        {
+          label: 'การนัดสำเร็จ',
+          data: successData,
+          backgroundColor: '#5cd1be',
+          borderRadius: { topLeft: 12, topRight: 12 },
+          borderSkipped: 'bottom'
+        },
+        {
+          label: 'ปฏิเสธการนัด',
+          data: rejectData,
+          backgroundColor: '#ff7888',
+          borderRadius: { topLeft: 12, topRight: 12 },
+          borderSkipped: 'bottom'
+        }
+      ]
+    };
+
+    // Bottom Consult Cards Data (Consult สำเร็จ, ขาดการติดต่อ)
+    this.consultCardsData = {
+      brain: {
+        success: consults.filter(item => item.category === 'สมอง' && item.status === 'การนัดสำเร็จ').length,
+        miss: consults.filter(item => item.category === 'สมอง' && item.status === 'ขาดการติดต่อ').length
+      },
+      chest: {
+        success: consults.filter(item => item.category === 'ทรวงอก' && item.status === 'การนัดสำเร็จ').length,
+        miss: consults.filter(item => item.category === 'ทรวงอก' && item.status === 'ขาดการติดต่อ').length
+      },
+      eye: {
+        success: consults.filter(item => item.category === 'ดวงตา' && item.status === 'การนัดสำเร็จ').length,
+        miss: consults.filter(item => item.category === 'ดวงตา' && item.status === 'ขาดการติดต่อ').length
+      }
+    };
   }
 
   toggleExportDropdown() {
@@ -124,7 +345,7 @@ export class DashboardPage implements OnInit {
         });
         currentRow++;
       });
-      
+
       currentRow += 2; // spacing
     };
 
@@ -139,7 +360,7 @@ export class DashboardPage implements OnInit {
 
     const clusterLabels = this.clusteredBarData.labels as string[];
     const clusterDatasets = this.clusteredBarData.datasets;
-    addSection('สถิติแยกตามสถานะ', ['ประเภท', 'รอรับ', 'การนัดสำเร็จ', 'ปฏิเสธการนัด'], 
+    addSection('สถิติแยกตามสถานะ', ['ประเภท', 'รอรับ', 'การนัดสำเร็จ', 'ปฏิเสธการนัด'],
       clusterLabels.map((lbl, i) => [lbl, clusterDatasets[0].data[i], clusterDatasets[1].data[i], clusterDatasets[2].data[i]])
     );
 
@@ -202,7 +423,7 @@ export class DashboardPage implements OnInit {
     const clusterDatasets = this.clusteredBarData.datasets;
     const clusterHeader = ['ประเภท', ...clusterDatasets.map(ds => ds.label)];
     csvRows.push(clusterHeader.join(','));
-    
+
     clusterLabels.forEach((label, i) => {
       const row = [label];
       clusterDatasets.forEach(ds => {
@@ -214,7 +435,7 @@ export class DashboardPage implements OnInit {
     const csvData = csvRows.join('\n');
     const blob = new Blob(['\uFEFF' + csvData], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
-    
+
     if (link.download !== undefined) {
       const url = URL.createObjectURL(blob);
       link.setAttribute('href', url);
@@ -237,13 +458,13 @@ export class DashboardPage implements OnInit {
     },
     plugins: { legend: { display: false } }
   };
-  
+
   public horizontalBarData: ChartData<'bar'> = {
     labels: ['สมอง', 'ทรวงอก', 'ดวงตา'],
     datasets: [
-      { 
-        data: [110, 80, 50], 
-        backgroundColor: ['#f97316', '#14b8a6', '#3b82f6'], 
+      {
+        data: [110, 80, 50],
+        backgroundColor: ['#f97316', '#14b8a6', '#3b82f6'],
         borderRadius: 4,
         barThickness: 15
       }
@@ -255,15 +476,15 @@ export class DashboardPage implements OnInit {
     responsive: true,
     maintainAspectRatio: false,
     cutout: '80%',
-    plugins: { 
-      legend: { display: false } 
+    plugins: {
+      legend: { display: false }
     }
   };
   public doughnutChartData: ChartData<'doughnut'> = {
     labels: ['ส่งต่อเคส\t\t800 เคส', 'Tele Consult\t200 เคส'],
     datasets: [
-      { 
-        data: [800, 200], 
+      {
+        data: [800, 200],
         backgroundColor: ['#fb7185', '#fbbf24'],
         borderWidth: 0
       }
@@ -275,23 +496,125 @@ export class DashboardPage implements OnInit {
     responsive: true,
     maintainAspectRatio: false,
     scales: {
-      y: { border: { display: false } },
-      x: { grid: { display: false }, border: { display: false } }
+      y: {
+        min: 0,
+        max: 200,
+        ticks: {
+          stepSize: 50,
+          font: { family: 'Prompt', size: 11 }
+        },
+        border: { display: false }
+      },
+      x: {
+        grid: { display: false },
+        border: { display: false },
+        ticks: {
+          font: { family: 'Prompt', size: 12, weight: 'bold' }
+        }
+      }
     },
-    plugins: { 
-      legend: { 
-        position: 'top', 
+    plugins: {
+      legend: {
+        position: 'top',
         align: 'end',
         labels: { usePointStyle: true, boxWidth: 8, padding: 20, font: { family: 'Prompt', size: 12 } }
-      } 
+      },
+      tooltip: {
+        enabled: false, // We disable native rendering to draw our custom figma one
+        external: (context: any) => {
+          let tooltipEl = document.getElementById('chartjs-tooltip');
+
+          if (!tooltipEl) {
+            tooltipEl = document.createElement('div');
+            tooltipEl.id = 'chartjs-tooltip';
+            tooltipEl.style.background = '#474554';
+            tooltipEl.style.borderRadius = '12px';
+            tooltipEl.style.color = 'white';
+            tooltipEl.style.opacity = '0';
+            tooltipEl.style.pointerEvents = 'none';
+            tooltipEl.style.position = 'absolute';
+            tooltipEl.style.transition = 'all .1s ease';
+            tooltipEl.style.fontFamily = 'Prompt, sans-serif';
+            tooltipEl.style.padding = '12px 16px';
+            tooltipEl.style.minWidth = '165px';
+            tooltipEl.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
+            tooltipEl.style.zIndex = '1000';
+            document.body.appendChild(tooltipEl);
+          }
+
+          const tooltipModel = context.tooltip;
+          if (tooltipModel.opacity === 0) {
+            tooltipEl.style.opacity = '0';
+            return;
+          }
+
+          if (tooltipModel.body) {
+            const titleLines = tooltipModel.title || [];
+            const bodyLines = tooltipModel.body.map((b: any) => b.lines);
+
+            let innerHtml = '<div style="text-align: center; margin-bottom: 8px; font-weight: bold; font-size: 14px; color: #ffffff; font-family: Prompt;">';
+            titleLines.forEach((title: string) => {
+              innerHtml += title;
+            });
+            innerHtml += '</div>';
+
+            innerHtml += '<div style="background: white; border-radius: 20px; padding: 6px 14px; color: #1e293b; font-size: 12px; font-weight: 700; text-align: center; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); font-family: Prompt; white-space: nowrap;">';
+            bodyLines.forEach((body: string) => {
+              innerHtml += body;
+            });
+            innerHtml += '</div>';
+
+            // Caret (arrow pointing down)
+            innerHtml += '<div style="position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid #474554;"></div>';
+
+            tooltipEl.innerHTML = innerHtml;
+          }
+
+          const position = context.chart.canvas.getBoundingClientRect();
+
+          tooltipEl.style.opacity = '1';
+          tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX - (tooltipEl.offsetWidth / 2) + 'px';
+          tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY - tooltipEl.offsetHeight - 12 + 'px';
+        },
+        callbacks: {
+          label: (context: any) => {
+            let label = context.dataset.label || '';
+            if (label) {
+              label += ' ';
+            }
+            if (context.parsed.y !== null) {
+              label += context.parsed.y + ' เคส';
+            }
+            return label;
+          }
+        }
+      }
     }
   };
   public clusteredBarData: ChartData<'bar'> = {
     labels: ['สมอง', 'ทรวงอก', 'ดวงตา'],
     datasets: [
-      { label: 'รอตอบรับ', data: [50, 70, 20], backgroundColor: '#fbbf24', borderRadius: 4 },
-      { label: 'การนัดสำเร็จ', data: [120, 180, 60], backgroundColor: '#2dd4bf', borderRadius: 4 },
-      { label: 'ปฏิเสธการนัด', data: [30, 100, 10], backgroundColor: '#fb7185', borderRadius: 4 }
+      {
+        label: 'รอตอบรับ',
+        data: [50, 70, 20],
+        backgroundColor: '#ffb356',
+        borderRadius: { topLeft: 12, topRight: 12 },
+        borderSkipped: 'bottom'
+      },
+      {
+        label: 'การนัดสำเร็จ',
+        data: [120, 180, 60],
+        backgroundColor: '#5cd1be',
+        borderRadius: { topLeft: 12, topRight: 12 },
+        borderSkipped: 'bottom'
+      },
+      {
+        label: 'ปฏิเสธการนัด',
+        data: [30, 100, 10],
+        backgroundColor: '#ff7888',
+        borderRadius: { topLeft: 12, topRight: 12 },
+        borderSkipped: 'bottom'
+      }
     ]
   };
 }

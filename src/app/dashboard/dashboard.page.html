@@ -1,37 +1,40 @@
-<ion-content [fullscreen]="true">
-  <div class="layout-wrapper" [class.sidebar-collapsed]="layout.isSidebarCollapsed()">
+<ion-content [fullscreen]="true" style="--background: #F7F9FC !important; background-color: #F7F9FC !important;">
+  <div class="layout-wrapper" [class.sidebar-collapsed]="layout.isSidebarCollapsed()"
+    style="background-color: #F7F9FC !important;">
     <app-sidebar></app-sidebar>
-    
-    <div class="main-content">
+
+    <div class="main-content" style="background-color: #F7F9FC !important;">
       <app-header></app-header>
 
-      <div class="page-container">
-        
+      <div class="page-container" style="background-color: transparent !important;">
+
         <div class="page-header-row">
           <h1 class="page-title">Dashboard</h1>
           <div class="header-actions">
-            <span class="text-muted">แสดงข้อมูล :</span>
+            <span class="label-text">แสดงข้อมูล :</span>
             <select class="rounded-select">
               <option>ณ ปัจจุบัน</option>
             </select>
           </div>
         </div>
 
-        <!-- Tabs -->
         <div class="dashboard-tabs">
           <div class="d-tabs-left">
-            <div class="d-tab" [class.active]="activeTab === 'xray'" (click)="setActiveTab('xray')">สถิติการนัดหมาย X-ray</div>
-            <div class="d-tab" [class.active]="activeTab === 'consult'" (click)="setActiveTab('consult')">สถิติการนัดหมาย Consult</div>
+            <div class="d-tab" [class.active]="activeTab === 'xray'" (click)="setActiveTab('xray')">สถิติการนัดหมาย
+              X-ray</div>
+            <div class="d-tab" [class.active]="activeTab === 'consult'" (click)="setActiveTab('consult')">
+              สถิติการนัดหมาย Consult</div>
           </div>
           <div class="d-tabs-right">
-            <span class="text-muted"><ion-icon name="time-outline"></ion-icon> ข้อมูลทั้งหมด 18/04/2567</span>
-            
+            <span class="text-muted"><ion-icon name="time-outline"
+                style="margin-right: 6px; font-size: 1.1rem; vertical-align: -2px;"></ion-icon>ข้อมูลอัปเดท
+              18/04/2567</span>
+
             <div class="export-dropdown-container">
               <button class="btn-outline-capsule" (click)="toggleExportDropdown()">
                 <ion-icon name="push-outline"></ion-icon> Export
               </button>
-              
-              <!-- Dropdown Menu -->
+
               <div class="custom-dropdown-menu" *ngIf="isExportDropdownOpen">
                 <div class="dropdown-header">
                   <span>เลือกรูปแบบไฟล์ดาวน์โหลด</span>
@@ -59,216 +62,225 @@
           </div>
         </div>
 
-        <div class="dashboard-content-wrapper" *ngIf="dashboardData">
-          
-          <!-- X-RAY TAB CONTENT -->
-          <ng-container *ngIf="activeTab === 'xray'">
-            <!-- Top Stats Card -->
-            <div class="card stat-summary-card">
-              <div class="stat-header">
-                <h3 class="card-title">สถิติการนัดหมาย X-ray</h3>
-                <a href="#" class="view-all"><ion-icon name="calendar-outline"></ion-icon> ดูทั้งหมด</a>
-              </div>
+        <div class="main-dashboard-holder">
 
-              <div class="main-stats-row">
-                <!-- Monthly Case Box -->
-                <div class="m-stat-box-left">
-                  <div class="icon-label">
-                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="24" cy="24" r="24" fill="#FFF2F4"/>
-                      <rect x="12" y="10" width="24" height="28" rx="4" fill="white" stroke="#FFE2E6" stroke-width="2"/>
-                      <rect x="16" y="16" width="16" height="3" rx="1.5" fill="#FFE2E6"/>
-                      <rect x="16" y="22" width="12" height="3" rx="1.5" fill="#FFE2E6"/>
-                      <rect x="16" y="28" width="8" height="3" rx="1.5" fill="#FFE2E6"/>
-                      <circle cx="34" cy="30" r="9" fill="#FF4D78" stroke="white" stroke-width="2"/>
-                      <path d="M34 32C34 32 31.5 30.5 31.5 29C31.5 27.9 32.4 27.2 33.4 27.5C34 27.7 34 28.2 34 28.2C34 28.2 34 27.7 34.6 27.5C35.6 27.2 36.5 27.9 36.5 29C36.5 30.5 34 32 34 32Z" fill="white"/>
-                    </svg>
-                    <div class="label-text">
-                      <span class="text-muted">จำนวนเคสประจำเดือน</span>
-                      <strong class="text-blue-dark">มีนาคม 2567</strong>
+          <div class="dashboard-content-wrapper" *ngIf="dashboardData">
+
+            <ng-container *ngIf="activeTab === 'xray'">
+              <div class="stat-summary-card">
+                <div class="stat-header">
+                  <h3 class="card-title">สถิติการนัดหมาย X-ray</h3>
+                  <a href="#" class="view-all"><ion-icon name="calendar-outline"></ion-icon> ดูทั้งหมด</a>
+                </div>
+
+                <div class="main-stats-row">
+                  <div class="m-stat-card card-monthly" style="background-color: #FEF9F5 !important;">
+                    <div class="icon-label">
+                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="24" cy="24" r="24" fill="#FFF2F4" />
+                        <rect x="12" y="10" width="24" height="28" rx="4" fill="white" stroke="#FFE2E6"
+                          stroke-width="2" />
+                        <rect x="16" y="16" width="16" height="3" rx="1.5" fill="#FFE2E6" />
+                        <rect x="16" y="22" width="12" height="3" rx="1.5" fill="#FFE2E6" />
+                        <rect x="16" y="28" width="8" height="3" rx="1.5" fill="#FFE2E6" />
+                        <circle cx="34" cy="30" r="9" fill="#FF4D78" stroke="white" stroke-width="2" />
+                        <path
+                          d="M34 32C34 32 31.5 30.5 31.5 29C31.5 27.9 32.4 27.2 33.4 27.5C34 27.7 34 28.2 34 28.2C34 28.2 34 27.7 34.6 27.5C35.6 27.2 36.5 27.9 36.5 29C36.5 30.5 34 32 34 32Z"
+                          fill="white" />
+                      </svg>
+                      <div class="label-text">
+                        <span class="text-muted">จำนวนเคสประจำเดือน</span>
+                        <strong class="text-blue-dark">มีนาคม 2567</strong>
+                      </div>
+                    </div>
+                    <div class="value-text text-blue">{{ monthlyTotalCases }} <small>เคส</small></div>
+                  </div>
+
+                  <div class="m-stat-card card-urgent" style="background-color: #fff2f4 !important;">
+                    <div class="icon-label">
+                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 18H14" stroke="#FF4D4D" stroke-width="2" stroke-linecap="round" />
+                        <path d="M4 24H12" stroke="#FF4D4D" stroke-width="2.5" stroke-linecap="round" />
+                        <path d="M7 30H13" stroke="#FF4D4D" stroke-width="2" stroke-linecap="round" />
+                        <rect x="18" y="16" width="24" height="18" rx="4" fill="#FFEBEB" stroke="#FF4D4D"
+                          stroke-width="2" />
+                        <path d="M26 16V13C26 11.9 26.9 11 28 11H32C33.1 11 34 11.9 34 13V16" stroke="#FF4D4D"
+                          stroke-width="2" stroke-linecap="round" />
+                        <path d="M30 21V29" stroke="#FF4D4D" stroke-width="2.5" stroke-linecap="round" />
+                        <path d="M26 25H34" stroke="#FF4D4D" stroke-width="2.5" stroke-linecap="round" />
+                      </svg>
+                      <span class="label-text">เคสด่วน</span>
+                    </div>
+                    <div class="value-text text-red">{{ monthlyUrgentCases }} <small>เคส</small></div>
+                  </div>
+
+                  <div class="m-stat-card card-normal" style="background-color: #ebfdf5 !important;">
+                    <div class="icon-label">
+                      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="12" y="16" width="24" height="18" rx="4" fill="#EBFDF5" stroke="#10B981"
+                          stroke-width="2" />
+                        <path d="M20 16V13C20 11.9 20.9 11 22 11H26C27.1 11 28 11.9 28 13V16" stroke="#10B981"
+                          stroke-width="2" stroke-linecap="round" />
+                        <path d="M24 21V29" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" />
+                        <path d="M20 25H28" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" />
+                      </svg>
+                      <span class="label-text">เคสปกติ</span>
+                    </div>
+                    <div class="value-text text-green">{{ monthlyNormalCases }} <small>เคส</small></div>
+                  </div>
+                </div>
+
+                <div class="date-scroller">
+                  <div class="date-item" [class.today-active]="stat.isToday" *ngFor="let stat of dailyStats"
+                    style="background: white !important;">
+                    <div class="date-header">
+                      <span class="day-badge" *ngIf="stat.isToday">TODAY</span>
+                      <span class="date-text">{{stat.dateStr}}</span>
+                    </div>
+                    <div class="date-stats">
+                      <div class="d-stat"><span class="line-red"></span> เคสด่วน <span>{{stat.urgent}} เคส</span></div>
+                      <div class="d-stat"><span class="line-green"></span> เคสปกติ <span>{{stat.normal}} เคส</span>
+                      </div>
                     </div>
                   </div>
-                  <div class="value-text text-blue">100 <small>เคส</small></div>
+                  <button class="scroll-arrow" style="background: white !important;"><ion-icon
+                      name="chevron-forward-outline"></ion-icon></button>
                 </div>
 
-                <!-- Divider -->
-                <div class="vertical-divider"></div>
-
-                <!-- Urgent Case Card -->
-                <div class="m-stat-card card-urgent">
-                  <div class="icon-label">
-                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M6 18H14" stroke="#FF4D4D" stroke-width="2" stroke-linecap="round"/>
-                      <path d="M4 24H12" stroke="#FF4D4D" stroke-width="2.5" stroke-linecap="round"/>
-                      <path d="M7 30H13" stroke="#FF4D4D" stroke-width="2" stroke-linecap="round"/>
-                      <rect x="18" y="16" width="24" height="18" rx="4" fill="#FFEBEB" stroke="#FF4D4D" stroke-width="2"/>
-                      <path d="M26 16V13C26 11.9 26.9 11 28 11H32C33.1 11 34 11.9 34 13V16" stroke="#FF4D4D" stroke-width="2" stroke-linecap="round"/>
-                      <path d="M30 21V29" stroke="#FF4D4D" stroke-width="2.5" stroke-linecap="round"/>
-                      <path d="M26 25H34" stroke="#FF4D4D" stroke-width="2.5" stroke-linecap="round"/>
-                    </svg>
-                    <span class="label-text">เคสด่วน</span>
-                  </div>
-                  <div class="value-text text-red">20 <small>เคส</small></div>
-                </div>
-
-                <!-- Normal Case Card -->
-                <div class="m-stat-card card-normal">
-                  <div class="icon-label">
-                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect x="12" y="16" width="24" height="18" rx="4" fill="#EBFDF5" stroke="#10B981" stroke-width="2"/>
-                      <path d="M20 16V13C20 11.9 20.9 11 22 11H26C27.1 11 28 11.9 28 13V16" stroke="#10B981" stroke-width="2" stroke-linecap="round"/>
-                      <path d="M24 21V29" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/>
-                      <path d="M20 25H28" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/>
-                    </svg>
-                    <span class="label-text">เคสปกติ</span>
-                  </div>
-                  <div class="value-text text-green">80 <small>เคส</small></div>
-                </div>
-              </div>
-
-              <div class="date-scroller">
-                <div class="date-item" [class.today-active]="day === 27" *ngFor="let day of [27,28,29]">
-                  <div class="date-header">
-                    <span class="day-badge" *ngIf="day===27">TODAY</span>
-                    <span class="date-text">{{day}} มีนาคม 2567</span>
-                  </div>
-                  <div class="date-stats">
-                    <div class="d-stat" *ngIf="day === 27"><span class="line-red"></span> เคสด่วน <span>3 เคส</span></div>
-                    <div class="d-stat" *ngIf="day === 27"><span class="line-green"></span> เคสปกติ <span>1 เคส</span></div>
-                    
-                    <div class="d-stat" *ngIf="day === 28"><span class="line-red"></span> เคสด่วน <span>5 เคส</span></div>
-                    <div class="d-stat" *ngIf="day === 28"><span class="line-green"></span> เคสปกติ <span>12 เคส</span></div>
-                    
-                    <div class="d-stat" *ngIf="day === 29"><span class="line-red"></span> เคสด่วน <span>8 เคส</span></div>
-                    <div class="d-stat" *ngIf="day === 29"><span class="line-green"></span> เคสปกติ <span>0 เคส</span></div>
-                  </div>
-                </div>
-                <div class="date-item">
-                  <div class="date-header">
-                    <span class="date-text">3 เมษายน 2567</span>
-                  </div>
-                  <div class="date-stats">
-                    <div class="d-stat"><span class="line-red"></span> เคสด่วน <span>2 เคส</span></div>
-                    <div class="d-stat"><span class="line-green"></span> เคสปกติ <span>3 เคส</span></div>
-                  </div>
-                </div>
-                <button class="scroll-arrow"><ion-icon name="chevron-forward-outline"></ion-icon></button>
-              </div>
-              
-              <div class="scroller-dots">
-                <span class="dot active"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-              </div>
-            </div>
-          </ng-container>
-
-          <!-- CONSULT TAB CONTENT -->
-          <ng-container *ngIf="activeTab === 'consult'">
-            <!-- Charts Row -->
-            <div class="charts-row">
-              <div class="card chart-card">
-                <h3 class="card-title">สถิติประเภทของการขอ Consult</h3>
-                <div class="custom-hbar-container">
-                  <div class="ch-row" *ngFor="let item of customHBarData">
-                    <div class="ch-icon"><img [src]="'https://api.iconify.design/' + item.icon + '.svg'" width="24" height="24" /></div>
-                    <div class="ch-label">{{item.label}}</div>
-                    <div class="ch-bar-wrapper">
-                      <div class="ch-bar-fill" [style.width.%]="(item.value / 150) * 100" [style.background-color]="item.color"></div>
-                    </div>
-                    <div class="ch-value"><strong>{{item.value}}</strong> เคส</div>
-                  </div>
+                <div class="scroller-dots">
+                  <span class="dot active"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
                 </div>
               </div>
+            </ng-container>
 
-              <div class="card chart-card">
-                <h3 class="card-title">สถิติรูปแบบการ Consult</h3>
-                <div class="donut-chart-wrapper">
-                  <!-- The Chart Canvas + Center Text Box -->
-                  <div class="donut-chart-left">
-                    <canvas baseChart [data]="doughnutChartData" [options]="doughnutChartOptions" type="doughnut"></canvas>
-                    <div class="donut-center-text">
-                      <div class="c-total">1,000</div>
-                      <div class="c-label">เคสทั้งหมด</div>
-                    </div>
-                    
-                    <!-- Floating Segment Badges -->
-                    <div class="donut-badge badge-top-right">
-                      <span class="percent">80 %</span>
-                      <span class="text">ส่งต่อเคส</span>
-                    </div>
-                    <div class="donut-badge badge-bottom-left">
-                      <span class="percent">20 %</span>
-                      <span class="text">Tele Consult</span>
+            <ng-container *ngIf="activeTab === 'consult'">
+              <div class="charts-row">
+                <div class="chart-card">
+                  <h3 class="card-title">สถิติประเภทของการขอ Consult</h3>
+                  <div class="custom-hbar-container">
+                    <div class="ch-item" *ngFor="let item of customHBarData">
+                      <div class="ch-header">
+                        <img [src]="'https://api.iconify.design/' + item.icon + '.svg'" class="ch-icon" />
+                        <span class="ch-label">{{item.label}}</span>
+                      </div>
+                      <div class="ch-bar-row">
+                        <div class="ch-bar-fill" [style.width.%]="item.widthPercent"
+                          [style.background-color]="item.color"></div>
+                        <span class="ch-value"><strong>{{item.value}}</strong> เคส</span>
+                      </div>
                     </div>
                   </div>
-                  
-                  <!-- Custom HTML Legend on the right -->
-                  <div class="donut-legend-right">
-                    <div class="legend-pill bg-rose">
-                      <span class="legend-dot dot-rose"></span>
-                      <span class="legend-label">ส่งต่อเคส</span>
-                      <span class="legend-value">800 <small>เคส</small></span>
+                </div>
+
+                <div class="chart-card">
+                  <h3 class="card-title">สถิติรูปแบบการ Consult</h3>
+                  <div class="donut-chart-wrapper">
+                    <div class="donut-chart-left">
+                      <canvas baseChart [data]="doughnutChartData" [options]="doughnutChartOptions"
+                        type="doughnut"></canvas>
+                      <div class="donut-center-text">
+                        <div class="c-total">{{ consultsTotalCount | number }}</div>
+                        <div class="c-label">เคสทั้งหมด</div>
+                      </div>
+
+                      <div class="donut-badge badge-top-right" style="background: white !important;">
+                        <span class="percent">{{ referPercentage }} %</span>
+                        <span class="text">ส่งต่อเคส</span>
+                      </div>
+                      <div class="donut-badge badge-bottom-left" style="background: white !important;">
+                        <span class="percent">{{ telePercentage }} %</span>
+                        <span class="text">Tele Consult</span>
+                      </div>
                     </div>
-                    <div class="legend-pill bg-amber">
-                      <span class="legend-dot dot-amber"></span>
-                      <span class="legend-label">Tele Consult</span>
-                      <span class="legend-value">200 <small>เคส</small></span>
+
+                    <div class="donut-legend-right">
+                      <div class="legend-pill bg-rose" style="background-color: #fff1f2 !important;">
+                        <span class="legend-dot dot-rose"></span>
+                        <span class="legend-label">ส่งต่อเคส</span>
+                        <span class="legend-value">{{ referCount | number }} <small>เคส</small></span>
+                      </div>
+                      <div class="legend-pill bg-amber" style="background-color: #fef3c7 !important;">
+                        <span class="legend-dot dot-amber"></span>
+                        <span class="legend-label">Tele Consult</span>
+                        <span class="legend-value">{{ teleCount | number }} <small>เคส</small></span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Large Clustered Bar -->
-            <div class="card chart-card large-chart">
-              <div class="clustered-chart-container">
-                 <canvas baseChart [data]="clusteredBarData" [options]="clusteredBarOptions" type="bar"></canvas>
+              <div class="chart-card large-chart">
+                <div class="clustered-chart-container">
+                  <div class="chart-y-unit">เคส</div>
+                  <canvas baseChart [data]="clusteredBarData" [options]="clusteredBarOptions" type="bar"></canvas>
+                </div>
               </div>
-            </div>
 
-            <!-- Bottom Consult Cards -->
-            <div class="card bottom-consult-card">
-              <h3 class="card-title">การนัด Consult</h3>
-              <div class="consult-stats-grid">
-                
-                <div class="consult-box">
-                  <div class="c-left-col">
-                    <div class="c-icon"><img src="https://api.iconify.design/fluent-emoji-flat:brain.svg" width="32" height="32" /></div>
-                    <strong>สมอง</strong>
+              <div class="bottom-consult-card">
+                <h3 class="card-title">การนัด Consult</h3>
+                <div class="consult-stats-grid">
+
+                  <div class="consult-box" style="background: #f5f7fc !important;">
+                    <div class="c-left-col" style="background: transparent !important;">
+                      <div class="c-icon"><img src="https://api.iconify.design/fluent-emoji-flat:brain.svg" width="36"
+                          height="36" /></div>
+                      <strong>สมอง</strong>
+                    </div>
+                    <div class="c-stats">
+                      <div class="c-stat-pill" style="background: #ffffff !important;">
+                        <span class="pill-label">Consult สำเร็จ</span>
+                        <span class="pill-value text-green">{{ consultCardsData.brain.success }}</span>
+                      </div>
+                      <div class="c-stat-pill" style="background: #ffffff !important;">
+                        <span class="pill-label">ขาดการติดต่อ</span>
+                        <span class="pill-value text-red">{{ consultCardsData.brain.miss }}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div class="c-stats">
-                    <div class="c-stat-row"><span class="text-muted">Consult สำเร็จ</span> <span class="text-green">50</span></div>
-                    <div class="c-stat-row"><span class="text-muted">ขาดการติดต่อ</span> <span class="text-red">0</span></div>
+
+                  <div class="consult-box" style="background: #f5f7fc !important;">
+                    <div class="c-left-col" style="background: transparent !important;">
+                      <div class="c-icon"><img src="https://api.iconify.design/fluent-emoji-flat:x-ray.svg" width="36"
+                          height="36" /></div>
+                      <strong>ทรวงอก</strong>
+                    </div>
+                    <div class="c-stats">
+                      <div class="c-stat-pill" style="background: #ffffff !important;">
+                        <span class="pill-label">Consult สำเร็จ</span>
+                        <span class="pill-value text-green">{{ consultCardsData.chest.success }}</span>
+                      </div>
+                      <div class="c-stat-pill" style="background: #ffffff !important;">
+                        <span class="pill-label">ขาดการติดต่อ</span>
+                        <span class="pill-value text-red">{{ consultCardsData.chest.miss }}</span>
+                      </div>
+                    </div>
                   </div>
+
+                  <div class="consult-box" style="background: #f5f7fc !important;">
+                    <div class="c-left-col" style="background: transparent !important;">
+                      <div class="c-icon"><img src="https://api.iconify.design/fluent-emoji-flat:eye.svg" width="36"
+                          height="36" /></div>
+                      <strong>ดวงตา</strong>
+                    </div>
+                    <div class="c-stats">
+                      <div class="c-stat-pill" style="background: #ffffff !important;">
+                        <span class="pill-label">Consult สำเร็จ</span>
+                        <span class="pill-value text-green">{{ consultCardsData.eye.success }}</span>
+                      </div>
+                      <div class="c-stat-pill" style="background: #ffffff !important;">
+                        <span class="pill-label">ขาดการติดต่อ</span>
+                        <span class="pill-value text-red">{{ consultCardsData.eye.miss }}</span>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
-
-                <div class="consult-box">
-                  <div class="c-left-col">
-                    <div class="c-icon"><img src="https://api.iconify.design/fluent-emoji-flat:lungs.svg" width="32" height="32" /></div>
-                    <strong>ทรวงอก</strong>
-                  </div>
-                  <div class="c-stats">
-                    <div class="c-stat-row"><span class="text-muted">Consult สำเร็จ</span> <span class="text-green">44</span></div>
-                    <div class="c-stat-row"><span class="text-muted">ขาดการติดต่อ</span> <span class="text-red">1</span></div>
-                  </div>
-                </div>
-
-                <div class="consult-box">
-                  <div class="c-left-col">
-                    <div class="c-icon"><img src="https://api.iconify.design/fluent-emoji-flat:eye.svg" width="32" height="32" /></div>
-                    <strong>ดวงตา</strong>
-                  </div>
-                  <div class="c-stats">
-                    <div class="c-stat-row"><span class="text-muted">Consult สำเร็จ</span> <span class="text-green">30</span></div>
-                    <div class="c-stat-row"><span class="text-muted">ขาดการติดต่อ</span> <span class="text-red">5</span></div>
-                  </div>
-                </div>
-
               </div>
-            </div>
-          </ng-container>
+            </ng-container>
 
+          </div>
         </div>
       </div>
     </div>

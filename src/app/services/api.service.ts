@@ -19,4 +19,8 @@ export class ApiService {
   getDashboardStats(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/dashboard`);
   }
+
+  getConsults(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/consults`);
+  }
 }

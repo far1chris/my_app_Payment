@@ -9,11 +9,23 @@
   </div>
 
   <div class="sidebar-menu">
-    <div class="menu-item-wrapper">
-      <a routerLink="/dashboard" routerLinkActive="active" class="menu-item">
+    <div class="menu-item-wrapper" [class.expanded]="isDashboardMenuExpanded">
+      <a class="menu-item has-submenu" (click)="toggleDashboardMenu()">
         <ion-icon name="grid-outline"></ion-icon>
         <span>Dashboard</span>
+        <ion-icon [name]="isDashboardMenuExpanded ? 'chevron-up-outline' : 'chevron-down-outline'" class="toggle-icon"></ion-icon>
       </a>
+      <div class="submenu" *ngIf="isDashboardMenuExpanded">
+        <a class="submenu-item" (click)="alertMockupHospital()" style="cursor: pointer;">
+          ภาพรวมโรงพยาบาล
+        </a>
+        <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="submenu-item">
+          ภาพรวมการนัดหมาย
+        </a>
+        <a class="submenu-item" (click)="alertMockupDoctor()" style="cursor: pointer;">
+          สถิติแพทย์รังสี
+        </a>
+      </div>
     </div>
 
     <div class="menu-item-wrapper" [class.expanded]="isXrayMenuExpanded">

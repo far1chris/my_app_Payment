@@ -1,2 +1,43 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
+
+// =============================================================
+// IONIC THEME VARIABLES - Background Override
+// This file is loaded AFTER global.scss, giving it highest
+// specificity for Ionic's own CSS custom property system.
+// ion-content reads --ion-background-color from :root to set
+// its Shadow DOM --background variable.
+// =============================================================
+
+:root {
+  // Force the entire app background to soft blueish-grey
+  // NOTE: CSS Custom Properties do NOT support !important
+  --ion-background-color: #F7F9FC;
+  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
+  --ion-background-color-rgb: 247, 249, 252;
+
+  // Prevent any Ionic palette from overriding cards/items to wrong color
+  --ion-item-background: #ffffff;
+  --ion-card-background: #ffffff;
+  --ion-popover-background: #ffffff;
+}
+
+// Force .ion-page (Angular routing wrapper) to match background
+.ion-page {
+  background-color: #F7F9FC !important;
+  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
+}
+
+// The actual inner scroll container inside ion-content Shadow DOM
+// is a div with id="background-content". We override via the
+// public CSS Part API that Ionic exposes.
+ion-content {
+  --background: #F7F9FC;
+  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
+}
+
+// Ensure ion-app itself doesn't bleed white
+ion-app {
+  background-color: #F7F9FC !important;
+  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
+}

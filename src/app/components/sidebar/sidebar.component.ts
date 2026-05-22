@@ -22,7 +22,8 @@ export class SidebarComponent  implements OnInit {
 
   ngOnInit() {}
 
-  isXrayMenuExpanded = true;
+  isXrayMenuExpanded = false;
+  isDashboardMenuExpanded = true;
 
   toggleXrayMenu() {
     if (this.layout.isSidebarCollapsed()) {
@@ -33,11 +34,28 @@ export class SidebarComponent  implements OnInit {
     }
   }
 
+  toggleDashboardMenu() {
+    if (this.layout.isSidebarCollapsed()) {
+      this.layout.toggleSidebar();
+      this.isDashboardMenuExpanded = true;
+    } else {
+      this.isDashboardMenuExpanded = !this.isDashboardMenuExpanded;
+    }
+  }
+
   toggleSidebar() {
     this.layout.toggleSidebar();
   }
 
   alertMockup() {
     alert('ระบบจำลอง: กำลังเปิดหน้ารายการรอ X-ray...');
+  }
+
+  alertMockupHospital() {
+    alert('ระบบจำลอง: กำลังเปิดหน้าภาพรวมโรงพยาบาล...');
+  }
+
+  alertMockupDoctor() {
+    alert('ระบบจำลอง: กำลังเปิดหน้าสถิติแพทย์รังสี...');
   }
 }

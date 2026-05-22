@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" style="--background: #EEF2F8; background-color: #EEF2F8;">
   <div class="layout-wrapper" [class.sidebar-collapsed]="layout.isSidebarCollapsed()">
     <app-sidebar></app-sidebar>
     
@@ -25,7 +25,7 @@
 
         <!-- Filters & Summary Cards -->
         <div class="summary-cards">
-          <div class="card stat-card active-stat">
+          <div class="card stat-card" [class.active-stat]="selectedStatus === 'all'" (click)="setStatusFilter('all')">
             <div class="icon-circle bg-blue-light">
               <!-- Placeholder for head icon -->
               <img src="https://api.iconify.design/fluent-emoji-flat:brain.svg" width="24" height="24" />
@@ -33,31 +33,31 @@
             <div class="stat-info">
               <span class="label">รายการทั้งหมด</span>
               <div class="value-container">
-                <span class="value text-blue">85</span> <span class="unit">เคส</span>
+                <span class="value text-blue">{{ getStatusCount('all') }}</span> <span class="unit">เคส</span>
               </div>
             </div>
           </div>
           
-          <div class="card stat-card">
+          <div class="card stat-card" [class.active-stat]="selectedStatus === 'pending'" (click)="setStatusFilter('pending')">
             <div class="icon-circle bg-yellow-light">
               <img src="https://api.iconify.design/flat-color-icons:document.svg" width="24" height="24" />
             </div>
             <div class="stat-info">
               <span class="label">รอรับผล</span>
               <div class="value-container">
-                <span class="value text-yellow">40</span> <span class="unit">เคส</span>
+                <span class="value text-yellow">{{ getStatusCount('pending') }}</span> <span class="unit">เคส</span>
               </div>
             </div>
           </div>
 
-          <div class="card stat-card">
+          <div class="card stat-card" [class.active-stat]="selectedStatus === 'completed'" (click)="setStatusFilter('completed')">
             <div class="icon-circle bg-green-light">
               <img src="https://api.iconify.design/flat-color-icons:approval.svg" width="24" height="24" />
             </div>
             <div class="stat-info">
               <span class="label">ยืนยันผลวินิจฉัย</span>
               <div class="value-container">
-                <span class="value text-green">45</span> <span class="unit">เคส</span>
+                <span class="value text-green">{{ getStatusCount('completed') }}</span> <span class="unit">เคส</span>
               </div>
             </div>
           </div>
@@ -153,7 +153,7 @@
                       <span class="text-green">ไม่พบโรค</span>
                     </div>
                   </td>
-                  <td>04/05/2567 10:00</td>
+                  <td>{{ item.orderDate }}</td>
                   <td>
                     <button class="btn-link" (click)="viewDetails(item)">
                       <ion-icon name="eye"></ion-icon>

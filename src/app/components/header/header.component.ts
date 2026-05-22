@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonIcon, IonPopover, IonContent, IonList, IonItem, IonLabel, IonListHeader } from '@ionic/angular/standalone';
+import { IonIcon, IonPopover, IonContent } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronDownOutline, notificationsOutline, personOutline, medkitOutline, logOutOutline, settingsOutline, alertCircleOutline, checkmarkCircle } from 'ionicons/icons';
 
@@ -9,7 +9,7 @@ import { chevronDownOutline, notificationsOutline, personOutline, medkitOutline,
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonIcon, IonPopover, IonContent, IonList, IonItem, IonLabel, IonListHeader]
+  imports: [CommonModule, IonIcon, IonPopover, IonContent]
 })
 export class HeaderComponent  implements OnInit {
   public componentId: string;

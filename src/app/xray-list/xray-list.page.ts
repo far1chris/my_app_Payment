@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton } from '@ionic/angular/standalone';
+import { IonContent, IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons } from '@ionic/angular/standalone';
 import { SidebarComponent } from '../components/sidebar/sidebar.component';
 import { HeaderComponent } from '../components/header/header.component';
 import * as ExcelJS from 'exceljs';
@@ -15,7 +15,7 @@ import { LayoutService } from '../services/layout.service';
   templateUrl: './xray-list.page.html',
   styleUrls: ['./xray-list.page.scss'],
   standalone: true,
-  imports: [IonContent, CommonModule, FormsModule, SidebarComponent, HeaderComponent, IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton]
+  imports: [IonContent, CommonModule, FormsModule, SidebarComponent, HeaderComponent, IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons]
 })
 export class XrayListPage implements OnInit {
   private apiService = inject(ApiService);
@@ -30,6 +30,7 @@ export class XrayListPage implements OnInit {
   public searchTerm: string = '';
   public selectedPriority: string = 'All';
   public activeTab: string = 'all';
+  public selectedStatus: string = 'all';
 
   // Pagination
   public currentPage: number = 1;
@@ -74,6 +75,50 @@ export class XrayListPage implements OnInit {
     }).length;
   }
 
+  setStatusFilter(status: string) {
+    this.selectedStatus = status;
+    this.applyFilters();
+  }
+
+  getStatusCount(status: string): number {
+    let temp = [...this.allXrayData];
+
+    // Filter by activeTab
+    if (this.activeTab !== 'all') {
+      temp = temp.filter(item => {
+        const examName = (item.examName || '').toLowerCase();
+        if (this.activeTab === 'brain') return examName.includes('brain') || examName.includes('head');
+        if (this.activeTab === 'chest') return examName.includes('chest');
+        if (this.activeTab === 'eye') return examName.includes('eye') || examName.includes('orbit');
+        return true;
+      });
+    }
+
+    // Filter by selectedPriority
+    if (this.selectedPriority !== 'All') {
+      temp = temp.filter(item => item.priority === this.selectedPriority);
+    }
+
+    // Filter by searchTerm
+    if (this.searchTerm.trim()) {
+      const term = this.searchTerm.toLowerCase();
+      temp = temp.filter(item => 
+        (item.patientName || '').toLowerCase().includes(term) ||
+        (item.hn || '').toLowerCase().includes(term) ||
+        (item.orderNo || '').toLowerCase().includes(term)
+      );
+    }
+
+    if (status === 'all') {
+      return temp.length;
+    } else if (status === 'pending') {
+      return temp.filter(item => item.status === 'In Progress' || item.status === 'รอรับผล').length;
+    } else if (status === 'completed') {
+      return temp.filter(item => item.status === 'Completed' || item.status === 'ยืนยันผลแล้ว').length;
+    }
+    return 0;
+  }
+
   applyFilters() {
     let temp = [...this.allXrayData];
 
@@ -101,6 +146,15 @@ export class XrayListPage implements OnInit {
         (item.hn || '').toLowerCase().includes(term) ||
         (item.orderNo || '').toLowerCase().includes(term)
       );
+    }
+
+    // Apply Status Filter
+    if (this.selectedStatus !== 'all') {
+      if (this.selectedStatus === 'pending') {
+        temp = temp.filter(item => item.status === 'In Progress' || item.status === 'รอรับผล');
+      } else if (this.selectedStatus === 'completed') {
+        temp = temp.filter(item => item.status === 'Completed' || item.status === 'ยืนยันผลแล้ว');
+      }
     }
 
     this.filteredData = temp;

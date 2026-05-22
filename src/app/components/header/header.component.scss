@@ -1,38 +1,48 @@
 .app-header {
   height: 72px;
-  background-color: transparent;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
+  margin: 16px 24px 0 24px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   position: sticky;
-  top: 0;
+  top: 16px;
   z-index: 90;
 }
 
 .header-left {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
 }
 
 .location-selector {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-weight: 500;
-  font-size: 0.95rem;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 0.92rem;
   cursor: pointer;
-  padding: 8px 16px;
-  border-radius: 20px;
+  padding: 6px 16px;
+  border-radius: 24px;
   background: white;
-  border: 1px solid var(--border-light);
-  transition: all 0.2s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  border: 1px solid #eef2f6;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+  color: #334155;
 
   .hospital-icon {
     display: flex;
@@ -40,17 +50,31 @@
     justify-content: center;
     width: 24px;
     height: 24px;
-    background: #fee2e2;
-    border-radius: 50%;
-    color: #ef4444;
-    font-size: 0.9rem;
   }
 
-  span { color: var(--text-muted); }
-  .chevron { color: var(--text-muted); font-size: 1rem; }
+  .colon {
+    color: #94a3b8;
+    font-weight: 700;
+    margin: 0 -2px;
+  }
+
+  .loc-text {
+    color: #334155;
+    font-weight: 600;
+  }
+
+  .chevron {
+    color: #94a3b8;
+    font-size: 1rem;
+    transition: transform 0.2s ease;
+  }
 
   &:hover {
     background: #f8fafc;
+    border-color: #cbd5e1;
+    .chevron {
+      transform: translateY(1px);
+    }
   }
 }
 
@@ -59,28 +83,40 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f3f6fc;
+  border: 1px solid #eef2f6;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
   
   ion-icon {
-    font-size: 1.4rem;
-    color: var(--primary-navy);
+    font-size: 1.25rem;
+    color: #2344a6;
   }
 
   .badge {
     position: absolute;
     top: -2px;
-    right: -4px;
+    right: -2px;
     background: #ef4444;
     color: white;
-    font-size: 0.6rem;
-    font-weight: 700;
-    width: 14px;
-    height: 14px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    width: 16px;
+    height: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    border: 2px solid var(--background-offwhite);
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+  }
+
+  &:hover {
+    background: #eef2f6;
+    transform: scale(1.05);
   }
 }
 
@@ -89,14 +125,18 @@
   align-items: center;
   gap: 12px;
   cursor: pointer;
-  padding: 4px;
-  transition: all 0.2s;
+  padding: 4px 16px 4px 4px;
+  border-radius: 30px;
+  background: #ffffff;
+  border: 1px solid #eef2f6;
+  transition: all 0.2s ease-in-out;
 
   .avatar {
     width: 36px;
     height: 36px;
     border-radius: 50%;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     
     img {
       width: 100%;
@@ -108,22 +148,33 @@
   .user-info {
     display: flex;
     flex-direction: column;
+    line-height: 1.2;
 
     .user-name {
       font-size: 0.85rem;
       font-weight: 700;
-      color: var(--primary-navy);
+      color: #2344a6;
     }
     .user-role {
-      font-size: 0.75rem;
-      color: var(--text-muted);
+      font-size: 0.7rem;
+      color: #64748b;
+      font-weight: 500;
     }
   }
 
   .dropdown-icon {
-    color: var(--primary-blue);
-    font-size: 1rem;
+    color: #2344a6;
+    font-size: 0.95rem;
     margin-left: 4px;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    .dropdown-icon {
+      transform: translateY(1px);
+    }
   }
 }
 

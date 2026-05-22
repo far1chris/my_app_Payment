@@ -1,13 +1,24 @@
+:host {
+  display: block;
+  background-color: #F7F9FC !important;
+}
+
+ion-content {
+  --background: #F7F9FC !important;
+  background-color: #F7F9FC !important;
+}
+
 .layout-wrapper {
   display: flex;
   min-height: 100vh;
+  background-color: #F7F9FC !important;
 }
 
 .main-content {
   flex: 1;
   width: calc(100% - 250px);
   margin-left: 250px;
-  background-color: #f4f6fa;
+  background-color: #F7F9FC !important;
   display: flex;
   flex-direction: column;
   transition: margin-left 0.3s ease, width 0.3s ease;
@@ -109,11 +120,20 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  border: 1px solid var(--border-light);
+  border: 1.5px solid #cbd5e1;
   box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
   &.active-stat {
     border-color: var(--primary-blue);
+    box-shadow: 0 0 0 1px var(--primary-blue), 0 4px 12px rgba(37, 99, 235, 0.08);
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary-blue);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
   }
 
   .icon-circle {

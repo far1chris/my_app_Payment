@@ -34,7 +34,7 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* @import '@ionic/angular/css/palettes/dark.system.css'; */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap');
 
@@ -44,14 +44,17 @@
 
 :root {
   --ion-font-family: 'Prompt', 'Inter', sans-serif;
-  --primary-navy: #102A6B;
+  --primary-navy: #1E3A8A;
   --primary-blue: #0A6CFF;
-  --background-offwhite: #F4F6F9;
+  --background-offwhite: #F7F9FC;
+  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
   --text-dark: #1F2937;
   --text-muted: #6B7280;
   --border-light: #E5E7EB;
   --success-green: #10B981;
   --warning-orange: #F59E0B;
+  --ion-background-color: #F7F9FC;
+  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
 }
 
 body {
@@ -76,12 +79,15 @@ body {
 ::-webkit-scrollbar {
   display: none;
 }
+
 ::-webkit-scrollbar-track {
   display: none;
 }
+
 ::-webkit-scrollbar-thumb {
   display: none;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   display: none;
 }
@@ -104,10 +110,17 @@ body {
   z-index: 1000;
   overflow: hidden;
   animation: slideDown 0.2s ease-out;
-  
+
   @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .dropdown-header {
@@ -165,4 +178,63 @@ body {
       }
     }
   }
+}
+
+.text-muted {
+  color: #64748b !important;
+}
+
+/* =============================================================
+   BACKGROUND OVERRIDE
+   
+   IMPORTANT: CSS Custom Properties (--variable) do NOT support
+   !important — it is invalid CSS and gets ignored by browsers.
+   We only use !important on real CSS properties (background-color).
+   
+   The definitive fix is the inline style on ion-content in templates:
+   style="--background: #F7F9FC"
+   ============================================================= */
+
+/* CSS Variables — no !important (invalid on custom props) */
+:root {
+  --ion-background-color: #F7F9FC;
+  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
+  --ion-background-color-rgb: 247, 249, 252;
+}
+
+/* Real CSS properties — !important is valid here */
+html,
+body,
+ion-app {
+  background-color: #F7F9FC !important;
+  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
+}
+
+/* Target Shadow DOM background div via Ionic's CSS Part API */
+ion-content::part(background) {
+  background: #F7F9FC !important;
+  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
+}
+
+/* Angular/Ionic routing wrapper */
+.ion-page {
+  background-color: #F7F9FC !important;
+  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
+}
+
+/* ion-content host — CSS var without !important */
+ion-content {
+  --background: #F7F9FC;
+  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
+  background-color: #F7F9FC !important;
+  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
+}
+
+/* Scoped layout containers */
+app-dashboard .layout-wrapper,
+app-dashboard .main-content,
+app-xray-list .layout-wrapper,
+app-xray-list .main-content {
+  background-color: #F7F9FC !important;
+  /* แก้ไขจาก #EEF2F8 เป็น #F7F9FC */
 }
